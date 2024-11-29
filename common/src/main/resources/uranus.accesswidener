@@ -1,0 +1,13 @@
+accessWidener v2 named
+accessible field net/minecraft/client/MinecraftClient renderTickCounter Lnet/minecraft/client/render/RenderTickCounter;
+accessible field net/minecraft/client/render/RenderTickCounter tickTime F
+mutable field net/minecraft/client/render/RenderTickCounter tickTime F
+accessible method net/minecraft/server/world/ThreadedAnvilChunkStorage getChunkHolder (J)Lnet/minecraft/server/world/ChunkHolder;
+accessible class net/minecraft/client/render/model/json/Transformation$Deserializer
+accessible method net/minecraft/client/render/model/json/Transformation$Deserializer <init> ()V
+accessible class net/minecraft/client/render/model/json/ModelTransformation$Deserializer
+accessible method net/minecraft/client/render/model/json/ModelTransformation$Deserializer <init> ()V
+accessible field net/minecraft/entity/ai/pathing/PathNodeMaker entityBlockXSize I
+accessible field net/minecraft/entity/ai/pathing/PathNodeMaker entityBlockYSize I
+accessible field net/minecraft/entity/ai/pathing/PathNodeMaker entityBlockZSize I
+accessible field net/minecraft/entity/damage/DamageSources registry Lnet/minecraft/registry/Registry;
