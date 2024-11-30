@@ -18,6 +18,7 @@
   ],
   "client": [
     "ArmorFeatureRendererMixin",
+    "BuiltinModelItemRendererMixin",
     "ClientWorldMixin",
     "SkullBlockEntityRendererMixin",
     "SoundSystemMixin",
