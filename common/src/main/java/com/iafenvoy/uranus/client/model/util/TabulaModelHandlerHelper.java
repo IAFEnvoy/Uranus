@@ -5,7 +5,7 @@ import com.iafenvoy.uranus.client.model.ITabulaModelAnimator;
 import com.iafenvoy.uranus.client.model.TabulaModel;
 import com.iafenvoy.uranus.client.model.TabulaModelHandler;
 import com.iafenvoy.uranus.client.model.tabula.TabulaModelContainer;
-import net.fabricmc.loader.api.FabricLoader;
+import dev.architectury.platform.Platform;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class TabulaModelHandlerHelper {
         if (!path.startsWith("/")) path = "/" + path;
         if (!path.endsWith(".tbl")) path = path + ".tbl";
         InputStream stream;
-        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+        if (Platform.isDevelopmentEnvironment()) {
             if (!path.startsWith(".")) path = "." + path;
             stream = new FileInputStream(path);
         } else stream = TabulaModelHandlerHelper.class.getResourceAsStream(path);
