@@ -37,6 +37,16 @@ public class TabulaModelHandlerHelper implements SynchronousResourceReloader {
     }
 
     @Nullable
+    public static TabulaModelContainer getContainer(Identifier id) {
+        return MODELS.get(id);
+    }
+
+    @Nullable
+    public static TabulaModel getModel(Identifier id) {
+        return getModel(id, null);
+    }
+
+    @Nullable
     public static TabulaModel getModel(Identifier id, ITabulaModelAnimator<?> tabulaAnimator) {
         try {
             String path = "models/tabula/" + id.getPath();
