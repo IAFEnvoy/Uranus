@@ -17,7 +17,7 @@ public class TabulaModelHandlerHelper {
     private static TabulaModel getOrNull(String modelPath, ITabulaModelAnimator<?> tabulaAnimator) {
         try {
             return new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel(modelPath), tabulaAnimator);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Uranus.LOGGER.error(e);
         }
         return null;
