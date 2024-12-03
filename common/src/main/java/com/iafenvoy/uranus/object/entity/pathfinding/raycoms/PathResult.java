@@ -152,9 +152,9 @@ public class PathResult<T extends Callable<Path>> {
                 Uranus.LOGGER.error("Mod tried to move an entity from non server thread", e);
             } catch (RuntimeException e) {
                 threadException = true;
-                Uranus.LOGGER.catching(e);
+                Uranus.LOGGER.error("Failed to start job", e);
             } catch (Exception e) {
-                Uranus.LOGGER.catching(e);
+                Uranus.LOGGER.error("Failed to start job", e);
             }
     }
 
@@ -169,7 +169,7 @@ public class PathResult<T extends Callable<Path>> {
             this.pathCalculation = null;
             this.setStatus(PathFindingStatus.CALCULATION_COMPLETE);
         } catch (InterruptedException | ExecutionException e) {
-            Uranus.LOGGER.catching(e);
+            Uranus.LOGGER.error("Failed to get result", e);
         }
     }
 

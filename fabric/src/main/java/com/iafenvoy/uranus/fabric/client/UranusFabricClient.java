@@ -6,6 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 public final class UranusFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        UranusClient.init();
         UranusClient.process();
     }
 }

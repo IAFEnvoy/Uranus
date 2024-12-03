@@ -5,32 +5,55 @@ import com.iafenvoy.uranus.client.model.ITabulaModelAnimator;
 import com.iafenvoy.uranus.client.model.TabulaModel;
 import com.iafenvoy.uranus.client.model.TabulaModelHandler;
 import com.iafenvoy.uranus.client.model.tabula.TabulaModelContainer;
-import dev.architectury.platform.Platform;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.SynchronousResourceReloader;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class TabulaModelHandlerHelper {
-    private static TabulaModel getOrNull(String modelPath, ITabulaModelAnimator<?> tabulaAnimator) {
+public class TabulaModelHandlerHelper implements SynchronousResourceReloader {
+    private static final Map<Identifier, TabulaModelContainer> MODELS = new HashMap<>();
+
+    @Override
+    public void reload(ResourceManager manager) {
+        MODELS.clear();
+        for (Map.Entry<Identifier, Resource> entry : manager.findResources("models/tabula", id -> id.getPath().endsWith(".tbl")).entrySet()) {
+            Identifier id = entry.getKey();
+            try {
+                MODELS.put(id, TabulaModelHandler.INSTANCE.loadTabulaModel(getModelJsonStream(id.toString(), entry.getValue().getInputStream())));
+            } catch (Exception e) {
+                Uranus.LOGGER.error("Failed to load tabula {}", id.toString(), e);
+            }
+        }
+        Uranus.LOGGER.info("Successfully load {} tabula models", MODELS.size());
+    }
+
+    @Nullable
+    public static TabulaModel getModel(Identifier id, ITabulaModelAnimator<?> tabulaAnimator) {
         try {
-            return new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel(modelPath), tabulaAnimator);
+            String path = "models/tabula/" + id.getPath();
+            if (!path.endsWith(".tbl")) path += ".tbl";
+            id = id.withPath(path);
+            if (MODELS.containsKey(id)) return new TabulaModel(MODELS.get(id), tabulaAnimator);
         } catch (Exception e) {
-            Uranus.LOGGER.error(e);
+            Uranus.LOGGER.error("Failed to load model {}", id, e);
         }
         return null;
     }
 
+    @Deprecated(forRemoval = true)
     public static TabulaModelContainer loadTabulaModel(String path) throws IOException {
         if (!path.startsWith("/")) path = "/" + path;
         if (!path.endsWith(".tbl")) path = path + ".tbl";
-        InputStream stream;
-        if (Platform.isDevelopmentEnvironment()) {
-            if (!path.startsWith(".")) path = "." + path;
-            stream = new FileInputStream(path);
-        } else stream = TabulaModelHandlerHelper.class.getResourceAsStream(path);
+        InputStream stream = MinecraftClient.getInstance().getResourceManager().open(new Identifier(path));
         return TabulaModelHandler.INSTANCE.loadTabulaModel(getModelJsonStream(path, stream));
     }
 
