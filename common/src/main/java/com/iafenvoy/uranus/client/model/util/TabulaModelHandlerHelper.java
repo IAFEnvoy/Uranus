@@ -5,6 +5,7 @@ import com.iafenvoy.uranus.client.model.ITabulaModelAnimator;
 import com.iafenvoy.uranus.client.model.TabulaModel;
 import com.iafenvoy.uranus.client.model.TabulaModelHandler;
 import com.iafenvoy.uranus.client.model.tabula.TabulaModelContainer;
+import com.iafenvoy.uranus.util.function.MemorizeSupplier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -47,7 +49,12 @@ public class TabulaModelHandlerHelper implements SynchronousResourceReloader {
     }
 
     @Nullable
-    public static TabulaModel getModel(Identifier id, ITabulaModelAnimator<?> tabulaAnimator) {
+    public static TabulaModel getModel(Identifier id, Supplier<ITabulaModelAnimator> tabulaAnimator) {
+        return getModel(id, new MemorizeSupplier<>(tabulaAnimator));
+    }
+
+    @Nullable
+    public static TabulaModel getModel(Identifier id, MemorizeSupplier<ITabulaModelAnimator> tabulaAnimator) {
         try {
             String path = "models/tabula/" + id.getPath();
             if (!path.endsWith(".tbl")) path += ".tbl";

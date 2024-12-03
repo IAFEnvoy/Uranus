@@ -5,6 +5,7 @@ import com.iafenvoy.uranus.client.model.basic.BasicModelPart;
 import com.iafenvoy.uranus.client.model.tabula.TabulaCubeContainer;
 import com.iafenvoy.uranus.client.model.tabula.TabulaCubeGroupContainer;
 import com.iafenvoy.uranus.client.model.tabula.TabulaModelContainer;
+import com.iafenvoy.uranus.util.function.MemorizeSupplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @author gegy1000
@@ -23,11 +25,11 @@ public class TabulaModel extends AdvancedEntityModel {
     public final ModelAnimator animator;
     protected final Map<String, AdvancedModelBox> cubes = new HashMap<>();
     protected final List<AdvancedModelBox> rootBoxes = new ArrayList<>();
-    protected final ITabulaModelAnimator tabulaAnimator;
+    protected final MemorizeSupplier<ITabulaModelAnimator> tabulaAnimator;
     protected final Map<String, AdvancedModelBox> identifierMap = new HashMap<>();
     protected final double[] scale;
 
-    public TabulaModel(TabulaModelContainer container, ITabulaModelAnimator tabulaAnimator) {
+    public TabulaModel(TabulaModelContainer container, MemorizeSupplier<ITabulaModelAnimator> tabulaAnimator) {
         this.texWidth = container.getTextureWidth();
         this.texHeight = container.getTextureHeight();
         this.tabulaAnimator = tabulaAnimator;
@@ -85,9 +87,9 @@ public class TabulaModel extends AdvancedEntityModel {
 
     @Override
     public void setAngles(Entity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        if (this.tabulaAnimator != null) {
-            this.tabulaAnimator.setRotationAngles(this, entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch, 1.0F);
-        }
+        ITabulaModelAnimator tabulaModelAnimator = this.tabulaAnimator.get();
+        if (tabulaModelAnimator != null)
+            tabulaModelAnimator.setRotationAngles(this, entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch, 1.0F);
     }
 
     public AdvancedModelBox getCube(String name) {
