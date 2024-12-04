@@ -4,7 +4,6 @@ import com.iafenvoy.uranus.StaticVariables;
 import com.iafenvoy.uranus.Uranus;
 import com.iafenvoy.uranus.animation.IAnimatedEntity;
 import com.iafenvoy.uranus.client.model.util.TabulaModelHandlerHelper;
-import com.iafenvoy.uranus.client.tick.ClientTickRateTracker;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.ReloadListenerRegistry;
 import net.minecraft.client.MinecraftClient;
@@ -28,6 +27,5 @@ public class UranusClient {
                 entity.setAnimationTick(0);
             }
         });
-        NetworkManager.registerReceiver(NetworkManager.Side.S2C, StaticVariables.SYNC_CLIENT_TICK, (buf, ctx) -> ClientTickRateTracker.getForClient(MinecraftClient.getInstance()).syncFromServer(buf.readNbt()));
     }
 }

@@ -13,17 +13,14 @@
     "PlayerEntityMixin",
     "PlayerInventoryMixin",
     "PlayerManagerMixin",
-    "ServerEntityManagerMixin",
-    "ServerWorldMixin"
+    "ServerEntityManagerMixin"
   ],
   "client": [
     "ArmorFeatureRendererMixin",
     "BuiltinModelItemRendererMixin",
     "ClientWorldMixin",
     "EntityRenderersMixin",
-    "SkullBlockEntityRendererMixin",
-    "SoundSystemMixin",
-    "SplashTextRendererMixin"
+    "SkullBlockEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
