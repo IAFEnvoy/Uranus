@@ -29,6 +29,12 @@ public interface IArmorRendererBase<T extends LivingEntity> {
     default void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, LivingEntity entity, EquipmentSlot slot, int light, ItemStack stack, BipedEntityModel<T> defaultModel) {
         BipedEntityModel<T> armorModel = this.getHumanoidArmorModel(entity, stack, slot, defaultModel);
         defaultModel.copyBipedStateTo(armorModel);
+        armorModel.head.visible = slot == EquipmentSlot.HEAD;
+        armorModel.body.visible = slot == EquipmentSlot.CHEST;
+        armorModel.leftArm.visible = slot == EquipmentSlot.CHEST;
+        armorModel.rightArm.visible = slot == EquipmentSlot.CHEST;
+        armorModel.leftLeg.visible = slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
+        armorModel.rightLeg.visible = slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
         VertexConsumer consumer = vertexConsumers.getBuffer(RenderLayer.getArmorCutoutNoCull(this.getArmorTexture(stack, entity, slot)));
         armorModel.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
     }
