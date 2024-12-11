@@ -19,7 +19,7 @@
     "ArmorFeatureRendererMixin",
     "BuiltinModelItemRendererMixin",
     "ClientWorldMixin",
-    "EntityRenderersMixin",
+    "ModelLoaderMixin",
     "SkullBlockEntityRendererMixin"
   ],
   "injectors": {

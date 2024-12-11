@@ -1,19 +1,13 @@
 package com.iafenvoy.uranus.client;
 
 import com.iafenvoy.uranus.StaticVariables;
-import com.iafenvoy.uranus.Uranus;
 import com.iafenvoy.uranus.animation.IAnimatedEntity;
-import com.iafenvoy.uranus.client.model.util.TabulaModelHandlerHelper;
 import dev.architectury.networking.NetworkManager;
-import dev.architectury.registry.ReloadListenerRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class UranusClient {
     public static void init() {
-        ReloadListenerRegistry.register(ResourceType.CLIENT_RESOURCES, new TabulaModelHandlerHelper(), new Identifier(Uranus.MOD_ID, "tabula"));
     }
 
     public static void process() {

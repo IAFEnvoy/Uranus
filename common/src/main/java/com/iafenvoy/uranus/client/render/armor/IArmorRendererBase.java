@@ -30,6 +30,7 @@ public interface IArmorRendererBase<T extends LivingEntity> {
         BipedEntityModel<T> armorModel = this.getHumanoidArmorModel(entity, stack, slot, defaultModel);
         defaultModel.copyBipedStateTo(armorModel);
         armorModel.head.visible = slot == EquipmentSlot.HEAD;
+        armorModel.hat.visible = slot == EquipmentSlot.HEAD;
         armorModel.body.visible = slot == EquipmentSlot.CHEST;
         armorModel.leftArm.visible = slot == EquipmentSlot.CHEST;
         armorModel.rightArm.visible = slot == EquipmentSlot.CHEST;

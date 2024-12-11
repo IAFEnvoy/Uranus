@@ -9,7 +9,6 @@ import com.iafenvoy.uranus.util.function.MemorizeSupplier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.SynchronousResourceReloader;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,11 +20,10 @@ import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class TabulaModelHandlerHelper implements SynchronousResourceReloader {
+public class TabulaModelHandlerHelper {
     private static final Map<Identifier, TabulaModelContainer> MODELS = new HashMap<>();
 
-    @Override
-    public void reload(ResourceManager manager) {
+    public static void reloadModel(ResourceManager manager) {
         MODELS.clear();
         for (Map.Entry<Identifier, Resource> entry : manager.findResources("models/tabula", id -> id.getPath().endsWith(".tbl")).entrySet()) {
             Identifier id = entry.getKey();
