@@ -14,22 +14,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  * @author gegy1000
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)
-public class TabulaModel extends AdvancedEntityModel {
+public class TabulaModel<T extends Entity> extends AdvancedEntityModel<T> {
     public final ModelAnimator animator;
     protected final Map<String, AdvancedModelBox> cubes = new HashMap<>();
     protected final List<AdvancedModelBox> rootBoxes = new ArrayList<>();
-    protected final MemorizeSupplier<ITabulaModelAnimator> tabulaAnimator;
+    protected final MemorizeSupplier<ITabulaModelAnimator<T>> tabulaAnimator;
     protected final Map<String, AdvancedModelBox> identifierMap = new HashMap<>();
     protected final double[] scale;
 
-    public TabulaModel(TabulaModelContainer container, MemorizeSupplier<ITabulaModelAnimator> tabulaAnimator) {
+    public TabulaModel(TabulaModelContainer container, MemorizeSupplier<ITabulaModelAnimator<T>> tabulaAnimator) {
         this.texWidth = container.getTextureWidth();
         this.texHeight = container.getTextureHeight();
         this.tabulaAnimator = tabulaAnimator;
@@ -86,8 +85,8 @@ public class TabulaModel extends AdvancedEntityModel {
     }
 
     @Override
-    public void setAngles(Entity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        ITabulaModelAnimator tabulaModelAnimator = this.tabulaAnimator.get();
+    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        ITabulaModelAnimator<T> tabulaModelAnimator = this.tabulaAnimator.get();
         if (tabulaModelAnimator != null)
             tabulaModelAnimator.setRotationAngles(this, entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch, 1.0F);
     }

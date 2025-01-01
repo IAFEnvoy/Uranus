@@ -273,7 +273,7 @@ public class IntermittentAnimation<T extends Entity & IIntermittentEntity> {
      */
 
     public float getAnimationProgressPolyN(int n) {
-        double x = this.timeRunning / this.duration;
+        double x = (double) this.timeRunning / this.duration;
         double xi = Math.pow(x, n);
         return (float) (xi / (xi + Math.pow(1.0D - x, n)));
     }
@@ -283,7 +283,7 @@ public class IntermittentAnimation<T extends Entity & IIntermittentEntity> {
      * 1.0F using 0.5 + arctan(PI * (x - 0.5)) / 2.00776964. It is super smooth.
      */
     public float getAnimationProgressArcTan() {
-        return (float) (0.5F + 0.49806510671F * Math.atan(3.14159265359D * (this.timeRunning / this.duration - 0.5D)));
+        return (float) (0.5F + 0.49806510671F * Math.atan(3.14159265359D * ((double) this.timeRunning / this.duration - 0.5D)));
     }
 
     /**

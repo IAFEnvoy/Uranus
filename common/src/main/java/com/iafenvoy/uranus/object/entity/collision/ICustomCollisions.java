@@ -43,7 +43,7 @@ public interface ICustomCollisions {
 
     //1.18 logic
     private static Vec3d collideBoundingBox2(Entity entity, Vec3d vec3d, Box box, World world, List<VoxelShape> voxelShapes) {
-        ImmutableList.Builder<VoxelShape> builder = ImmutableList.builderWithExpectedSize(voxelShapes.size() + 1);
+        ImmutableList.Builder<VoxelShape> builder = ImmutableList.builder();
         if (!voxelShapes.isEmpty()) builder.addAll(voxelShapes);
 
         WorldBorder worldborder = world.getWorldBorder();

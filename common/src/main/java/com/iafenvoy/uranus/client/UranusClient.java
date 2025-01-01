@@ -7,9 +7,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.world.World;
 
 public class UranusClient {
-    public static void init() {
-    }
-
     public static void process() {
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, StaticVariables.ANIMATION, (buf, ctx) -> {
             int entityID = buf.readInt();

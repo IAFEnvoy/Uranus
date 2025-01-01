@@ -25,7 +25,7 @@ public enum SurfaceType {
      *
      * @param blockState Block to check.
      * @param pos        the position.
-     * @return true if the block at that location can be walked on.
+     * @return WALKABLE if the block at that location can be walked on.
      */
     public static SurfaceType getSurfaceType(final BlockView world, final BlockState blockState, final BlockPos pos) {
         final Block block = blockState.getBlock();

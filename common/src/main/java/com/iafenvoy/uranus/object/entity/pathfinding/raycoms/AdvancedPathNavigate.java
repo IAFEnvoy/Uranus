@@ -444,8 +444,8 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             this.stop();
             return false;
         }
-        /**
-         * The world time when a path was added.
+        /*
+          The world time when a path was added.
          */
         long pathStartTime = this.world.getTime();
         return super.startMovingAlong(this.convertPath(path), speedFactor);

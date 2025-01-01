@@ -1,6 +1,5 @@
 package com.iafenvoy.uranus.object;
 
-import com.iafenvoy.uranus.Uranus;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LightningEntity;

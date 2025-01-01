@@ -15,7 +15,7 @@ import java.util.function.Function;
 public abstract class BasicModelBase<T extends Entity> extends EntityModel<T> {
     public int textureWidth = 64;
     public int textureHeight = 32;
-    public final List<BasicModelRenderer> boxList = Lists.newArrayList();
+    public final List<BasicModelRenderer<T>> boxList = Lists.newArrayList();
 
     protected BasicModelBase() {
         this(RenderLayer::getEntityCutoutNoCull);
@@ -25,7 +25,7 @@ public abstract class BasicModelBase<T extends Entity> extends EntityModel<T> {
         super(p_102613_);
     }
 
-    public void accept(BasicModelRenderer modelRenderer) {
+    public void accept(BasicModelRenderer<T> modelRenderer) {
         boxList.add(modelRenderer);
     }
 

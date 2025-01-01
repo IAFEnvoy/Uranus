@@ -118,11 +118,6 @@ public class PathJobRandomPos extends AbstractPathJob {
     }
 
     @Override
-    public PathResult getResult() {
-        return super.getResult();
-    }
-
-    @Override
     protected double computeHeuristic(final BlockPos pos) {
         return Math.sqrt(this.destination.getSquaredDistance(new BlockPos(pos.getX(), this.destination.getY(), pos.getZ())));
     }
@@ -145,7 +140,6 @@ public class PathJobRandomPos extends AbstractPathJob {
      *
      * @param range max dist to dest range
      * @param pos   dest to look from
-     * @return
      */
     public boolean posAndRangeMatch(final int range, final BlockPos pos) {
         return this.destination != null && range == this.maxDistToDest && this.destination.equals(pos);

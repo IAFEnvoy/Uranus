@@ -34,6 +34,7 @@ public class ArrayLayeredTexture extends AbstractTexture {
                     String s1 = iterator.next();
                     if (s1 != null) {
                         Optional<Resource> iresource1 = manager.getResource(new Identifier(s1));
+                        assert iresource1.isPresent();
                         NativeImage nativeimage1 = NativeImage.read(iresource1.get().getInputStream());
                         for (int i = 0; i < Math.min(nativeimage1.getHeight(), nativeimage.getHeight()); i++)
                             for (int j = 0; j < Math.min(nativeimage1.getWidth(), nativeimage.getWidth()); j++)

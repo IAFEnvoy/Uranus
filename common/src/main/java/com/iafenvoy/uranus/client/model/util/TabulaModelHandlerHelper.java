@@ -7,6 +7,7 @@ import com.iafenvoy.uranus.client.model.TabulaModelHandler;
 import com.iafenvoy.uranus.client.model.tabula.TabulaModelContainer;
 import com.iafenvoy.uranus.util.function.MemorizeSupplier;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -42,22 +43,22 @@ public class TabulaModelHandlerHelper {
     }
 
     @Nullable
-    public static TabulaModel getModel(Identifier id) {
+    public static <T extends Entity> TabulaModel<T> getModel(Identifier id) {
         return getModel(id, null);
     }
 
     @Nullable
-    public static TabulaModel getModel(Identifier id, Supplier<ITabulaModelAnimator> tabulaAnimator) {
+    public static <T extends Entity> TabulaModel<T> getModel(Identifier id, Supplier<ITabulaModelAnimator<T>> tabulaAnimator) {
         return getModel(id, new MemorizeSupplier<>(tabulaAnimator));
     }
 
     @Nullable
-    public static TabulaModel getModel(Identifier id, MemorizeSupplier<ITabulaModelAnimator> tabulaAnimator) {
+    public static <T extends Entity> TabulaModel<T> getModel(Identifier id, MemorizeSupplier<ITabulaModelAnimator<T>> tabulaAnimator) {
         try {
             String path = "models/tabula/" + id.getPath();
             if (!path.endsWith(".tbl")) path += ".tbl";
             id = id.withPath(path);
-            if (MODELS.containsKey(id)) return new TabulaModel(MODELS.get(id), tabulaAnimator);
+            if (MODELS.containsKey(id)) return new TabulaModel<>(MODELS.get(id), tabulaAnimator);
         } catch (Exception e) {
             Uranus.LOGGER.error("Failed to load model {}", id, e);
         }

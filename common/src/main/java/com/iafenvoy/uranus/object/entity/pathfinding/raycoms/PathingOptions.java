@@ -76,8 +76,8 @@ public class PathingOptions {
     }
 
     public boolean canClimbVines() {
-        /**
-         * Whether to path through vines.
+        /*
+          Whether to path through vines.
          */
         return false;
     }
@@ -167,7 +167,6 @@ public class PathingOptions {
      * Sets swimming ability
      *
      * @param canswim whether swimming is allowed
-     * @return
      */
     public PathingOptions withCanSwim(final boolean canswim) {
         this.setCanSwim(canswim);
@@ -178,7 +177,6 @@ public class PathingOptions {
      * Set door opening capability
      *
      * @param canEnter whether we can enter doors
-     * @return
      */
     public PathingOptions withCanEnterDoors(final boolean canEnter) {
         this.setEnterDoors(canEnter);

@@ -4,9 +4,9 @@ package com.iafenvoy.uranus.object.entity.pathfinding.raycoms.pathjobs;
  */
 
 import com.iafenvoy.uranus.Uranus;
-import com.iafenvoy.uranus.object.entity.pathfinding.raycoms.*;
 import com.iafenvoy.uranus.object.BlockUtil;
 import com.iafenvoy.uranus.object.PathUtil;
+import com.iafenvoy.uranus.object.entity.pathfinding.raycoms.*;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.BlockHalf;
@@ -622,8 +622,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
     /**
      * Creates the path for the given points
      *
-     * @param finalNode
-     * @return
      */
     protected BlockPos getPathTargetPos(MNode finalNode) {
         return finalNode.pos;
@@ -1119,9 +1117,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
      *
      * @param blockState Block to check.
      * @param pos        the position.
-     * @return true if the block at that location can be walked on.
+     * @return WALKABLE if the block at that location can be walked on.
      */
-
     protected SurfaceType isFlyable(BlockState blockState, BlockPos pos, MNode parent) {
         Block block = blockState.getBlock();
         if (block instanceof FenceBlock || block instanceof FenceGateBlock || block instanceof WallBlock || block instanceof FireBlock || block instanceof CampfireBlock || block instanceof BambooBlock || block instanceof BambooSaplingBlock || (blockState.getOutlineShape(this.world, pos).getMax(Direction.Axis.Y) > 1.0))

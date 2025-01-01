@@ -304,6 +304,7 @@ public class PathingStuckHandler implements IStuckHandler {
 
         // Skip ahead
         if (this.stuckLevel == 2 && this.teleportRange > 0 && this.hadPath) {
+            assert navigator.getCurrentPath() != null;
             int index = Math.min(navigator.getCurrentPath().getCurrentNodeIndex() + this.teleportRange, navigator.getCurrentPath().getLength() - 1);
             final PathNode togo = navigator.getCurrentPath().getNode(index);
             navigator.getOurEntity().requestTeleport(togo.x + 0.5d, togo.y, togo.z + 0.5d);

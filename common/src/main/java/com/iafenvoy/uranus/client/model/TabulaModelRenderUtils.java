@@ -5,9 +5,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.math.Direction;
 import org.joml.Vector3f;
 
+@Environment(EnvType.CLIENT)
 public class TabulaModelRenderUtils {
-    @Environment(EnvType.CLIENT)
-    static class PositionTextureVertex {
+    public static class PositionTextureVertex {
         public final Vector3f position;
         public final float textureU;
         public final float textureV;
@@ -27,8 +27,7 @@ public class TabulaModelRenderUtils {
         }
     }
 
-    @Environment(EnvType.CLIENT)
-    static class TexturedQuad {
+    public static class TexturedQuad {
         public final PositionTextureVertex[] vertexPositions;
         public final Vector3f normal;
 
@@ -53,7 +52,6 @@ public class TabulaModelRenderUtils {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public static class ModelBox {
         public final TexturedQuad[] quads;
         public final float posX1;

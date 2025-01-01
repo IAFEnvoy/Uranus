@@ -67,7 +67,7 @@ public enum Stage {
         private String getTextureId(Stage stage) {
             if (this.textureIds.containsKey(stage))
                 return this.textureIds.get(stage);
-            if (this.textureIds.size() == 0)
+            if (this.textureIds.isEmpty())
                 return "";
             return this.textureIds.get(Stage.First);
         }

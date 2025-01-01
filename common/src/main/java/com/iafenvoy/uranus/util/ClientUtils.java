@@ -53,10 +53,10 @@ public class ClientUtils {
         return prev + shortest * partialTicks;
     }
 
-    /**
-     * Sets a player specific texture. This can be used to change the skin or cape texture.
-     *
-     * @param player the player to set the texture to
+    /*
+      Sets a player specific texture. This can be used to change the skin or cape texture.
+
+      @param player the player to set the texture to
      * @param type the type of texture to apply
      * @param texture the texture to apply
      */
