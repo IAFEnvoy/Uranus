@@ -1,6 +1,7 @@
 package com.iafenvoy.uranus;
 
 import dev.architectury.networking.NetworkManager;
+import io.netty.buffer.ByteBufUtil;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,6 +15,6 @@ public class ServerHelper {
     public static void sendToAll(Identifier id, PacketByteBuf buf) {
         if (server != null)
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList())
-                NetworkManager.sendToPlayer(player, id, buf);
+                NetworkManager.sendToPlayer(player, id, new PacketByteBuf(buf.copy()));
     }
 }
