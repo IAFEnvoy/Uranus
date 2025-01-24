@@ -621,7 +621,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     /**
      * Creates the path for the given points
-     *
      */
     protected BlockPos getPathTargetPos(MNode finalNode) {
         return finalNode.pos;
@@ -1121,7 +1120,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
      */
     protected SurfaceType isFlyable(BlockState blockState, BlockPos pos, MNode parent) {
         Block block = blockState.getBlock();
-        if (block instanceof FenceBlock || block instanceof FenceGateBlock || block instanceof WallBlock || block instanceof FireBlock || block instanceof CampfireBlock || block instanceof BambooBlock || block instanceof BambooSaplingBlock || (blockState.getOutlineShape(this.world, pos).getMax(Direction.Axis.Y) > 1.0))
+        if (block instanceof FenceBlock || block instanceof FenceGateBlock || block instanceof WallBlock || block instanceof FireBlock || block instanceof CampfireBlock || block instanceof BambooBlock || block instanceof BambooShootBlock || (blockState.getOutlineShape(this.world, pos).getMax(Direction.Axis.Y) > 1.0))
             return SurfaceType.NOT_PASSABLE;
         FluidState fluid = this.world.getFluidState(pos);
         if (fluid != null && !fluid.isEmpty() && (fluid.getFluid() == Fluids.LAVA || fluid.getFluid() == Fluids.FLOWING_LAVA))
@@ -1133,7 +1132,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     protected SurfaceType isWalkableSurface(BlockState blockState, BlockPos pos) {
         Block block = blockState.getBlock();
-        if (block instanceof FenceBlock || block instanceof FenceGateBlock || block instanceof WallBlock || block instanceof FireBlock || block instanceof CampfireBlock || block instanceof BambooBlock || block instanceof BambooSaplingBlock || (blockState.getOutlineShape(this.world, pos).getMax(Direction.Axis.Y) > 1.0))
+        if (block instanceof FenceBlock || block instanceof FenceGateBlock || block instanceof WallBlock || block instanceof FireBlock || block instanceof CampfireBlock || block instanceof BambooBlock || block instanceof BambooShootBlock || (blockState.getOutlineShape(this.world, pos).getMax(Direction.Axis.Y) > 1.0))
             return SurfaceType.NOT_PASSABLE;
         FluidState fluid = this.world.getFluidState(pos);
         if (fluid != null && !fluid.isEmpty() && (fluid.getFluid() == Fluids.LAVA || fluid.getFluid() == Fluids.FLOWING_LAVA))

@@ -35,7 +35,7 @@ public enum SurfaceType {
                 || block instanceof FireBlock
                 || block instanceof CampfireBlock
                 || block instanceof BambooBlock
-                || block instanceof BambooSaplingBlock
+                || block instanceof BambooShootBlock
                 || block instanceof DoorBlock
                 || block instanceof MagmaBlock
                 || block instanceof PowderSnowBlock) {

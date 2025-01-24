@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientWorld.class)
 public class ClientWorldMixin {
     @Inject(method = "addEntity", at = @At("HEAD"), cancellable = true)
-    public void onEntityJoin(int i, Entity entity, CallbackInfo ci) {
+    public void onEntityJoin(Entity entity, CallbackInfo ci) {
         if (EntityEvents.ON_JOIN_WORLD.invoker().onJoinWorld(entity, (World) (Object) this))
             ci.cancel();
     }

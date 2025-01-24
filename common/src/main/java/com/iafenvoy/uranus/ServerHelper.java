@@ -1,7 +1,6 @@
 package com.iafenvoy.uranus;
 
 import dev.architectury.networking.NetworkManager;
-import io.netty.buffer.ByteBufUtil;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
