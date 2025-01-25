@@ -4,6 +4,8 @@ plugins {
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+    enableTransitiveAccessWideners = true
+    addTransitiveAccessWideners(List.of(project(":common").loom.accessWidenerPath))
 }
 
 architectury {
@@ -55,4 +57,7 @@ shadowJar {
 
 remapJar {
     input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = ""
+    atAccessWideners.add("uranus.accesswidener")
 }
