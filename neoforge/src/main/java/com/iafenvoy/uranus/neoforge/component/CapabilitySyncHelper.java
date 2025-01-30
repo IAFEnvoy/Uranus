@@ -42,7 +42,7 @@ public class CapabilitySyncHelper {
     }
 
     @SubscribeEvent
-    public static void onLivingTick(EntityTickEvent event) {
+    public static void onLivingTick(EntityTickEvent.Post event) {
         if (event.getEntity() instanceof LivingEntity living)
             for (AttachmentType<? extends IAttachment> type : LIVINGS)
                 if (living.getData(type) instanceof ITickableAttachment tickable)
@@ -50,7 +50,7 @@ public class CapabilitySyncHelper {
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent event) {
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
         PlayerEntity player = event.getEntity();
         for (PlayerCapabilityHolder<? extends IAttachment> holder : PLAYERS) {
             if (player.getData(holder.attachmentType) instanceof ITickableAttachment attachment) {
