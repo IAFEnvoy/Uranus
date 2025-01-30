@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 
 public class FoilSwordItemBase extends SwordItemBase {
-    public FoilSwordItemBase(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings);
+    public FoilSwordItemBase(ToolMaterial toolMaterial, Settings settings) {
+        super(toolMaterial, settings);
     }
 
     @Override

@@ -69,7 +69,7 @@ public class TabulaModelHandlerHelper {
     public static TabulaModelContainer loadTabulaModel(String path) throws IOException {
         if (!path.startsWith("/")) path = "/" + path;
         if (!path.endsWith(".tbl")) path = path + ".tbl";
-        InputStream stream = MinecraftClient.getInstance().getResourceManager().open(new Identifier(path));
+        InputStream stream = MinecraftClient.getInstance().getResourceManager().open(Identifier.tryParse(path));
         return TabulaModelHandler.INSTANCE.loadTabulaModel(getModelJsonStream(path, stream));
     }
 

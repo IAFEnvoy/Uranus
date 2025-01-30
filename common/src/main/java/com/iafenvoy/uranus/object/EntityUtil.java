@@ -14,7 +14,7 @@ public class EntityUtil {
         MobEntity entityToSpawn = entityType.create(world);
         if (entityToSpawn != null) {
             entityToSpawn.refreshPositionAndAngles(x, y, z, world.getRandom().nextFloat() * 360F, 0);
-            entityToSpawn.initialize(world, world.getLocalDifficulty(entityToSpawn.getBlockPos()), SpawnReason.MOB_SUMMONED, null, null);
+            entityToSpawn.initialize(world, world.getLocalDifficulty(entityToSpawn.getBlockPos()), SpawnReason.MOB_SUMMONED, null);
             world.spawnEntity(entityToSpawn);
         }
     }

@@ -1,9 +1,6 @@
 package com.iafenvoy.uranus.object.entity.collision;
 
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.ai.pathing.PathNodeNavigator;
-import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -76,7 +73,7 @@ public class CustomCollisionsNavigator extends MobNavigation {
         for (BlockPos blockpos : BlockPos.iterate(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1))) {
             double d0 = (double) blockpos.getX() + 0.5D - vec3d.x;
             double d1 = (double) blockpos.getZ() + 0.5D - vec3d.z;
-            if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0 && !this.world.getBlockState(blockpos).canPathfindThrough(this.world, blockpos, NavigationType.LAND) || ((ICustomCollisions) this.entity).canPassThrough(blockpos, this.world.getBlockState(blockpos), null))
+            if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0 && !this.world.getBlockState(blockpos).canPathfindThrough(NavigationType.LAND) || ((ICustomCollisions) this.entity).canPassThrough(blockpos, this.world.getBlockState(blockpos), null))
                 return false;
         }
         return true;
@@ -94,12 +91,12 @@ public class CustomCollisionsNavigator extends MobNavigation {
                     double d0 = (double) k + 0.5D - vec31.x;
                     double d1 = (double) l + 0.5D - vec31.z;
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
-                        PathNodeType pathnodetype = this.nodeMaker.getNodeType(this.world, k, y - 1, l, this.entity);
+                        PathNodeType pathnodetype = this.nodeMaker.getNodeType(new PathContext(this.world, this.entity), k, y - 1, l, this.entity);
                         mutable.set(k, y - 1, l);
                         if (!this.canWalkOnPath(pathnodetype) || ((ICustomCollisions) this.entity).canPassThrough(mutable, this.world.getBlockState(mutable), null))
                             return false;
 
-                        pathnodetype = this.nodeMaker.getNodeType(this.world, k, y, l, this.entity);
+                        pathnodetype = this.nodeMaker.getNodeType(new PathContext(this.world, this.entity), k, y, l, this.entity);
                         float f = this.entity.getPathfindingPenalty(pathnodetype);
                         if (f < 0.0F || f >= 8.0F) return false;
 

@@ -107,17 +107,17 @@ public class BasicModelPart {
     }
 
     public void render(MatrixStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn) {
-        this.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, -1);
     }
 
-    public void render(MatrixStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void render(MatrixStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.showModel)
             if (!this.cubeList.isEmpty() || !this.childModels.isEmpty()) {
                 matrixStackIn.push();
                 this.translateRotate(matrixStackIn);
-                this.doRender(matrixStackIn.peek(), bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+                this.doRender(matrixStackIn.peek(), bufferIn, packedLightIn, packedOverlayIn, color);
                 for (BasicModelPart basicModelPart : this.childModels)
-                    basicModelPart.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+                    basicModelPart.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
                 matrixStackIn.pop();
             }
     }
@@ -132,7 +132,7 @@ public class BasicModelPart {
             matrixStackIn.multiply(RotationAxis.POSITIVE_X.rotation(this.rotateAngleX));
     }
 
-    private void doRender(MatrixStack.Entry matrixEntryIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    private void doRender(MatrixStack.Entry matrixEntryIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         Matrix4f matrix4f = matrixEntryIn.getPositionMatrix();
         Matrix3f matrix3f = matrixEntryIn.getNormalMatrix();
 
@@ -151,7 +151,7 @@ public class BasicModelPart {
                     float f5 = BasicModelPart$positiontexturevertex.position.z() / 16.0F;
                     Vector4f vector4f = new Vector4f(f3, f4, f5, 1.0F);
                     vector4f.mul(matrix4f);
-                    bufferIn.vertex(vector4f.x(), vector4f.y(), vector4f.z(), red, green, blue, alpha, BasicModelPart$positiontexturevertex.textureU, BasicModelPart$positiontexturevertex.textureV, packedOverlayIn, packedLightIn, f, f1, f2);
+                    bufferIn.vertex(vector4f.x(), vector4f.y(), vector4f.z(), color, BasicModelPart$positiontexturevertex.textureU, BasicModelPart$positiontexturevertex.textureV, packedOverlayIn, packedLightIn, f, f1, f2);
                 }
             }
     }

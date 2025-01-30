@@ -1,10 +1,13 @@
 package com.iafenvoy.uranus.object.item;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.ItemTags;
+import org.jetbrains.annotations.NotNull;
 
 public class FoodUtils {
     public static int getFoodPoints(Entity entity) {
@@ -13,10 +16,11 @@ public class FoodUtils {
         return 0;
     }
 
-    public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish) {
-        if (item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem().getFoodComponent() != null)
-            if (!meatOnly || item.getItem().getFoodComponent().isMeat() || includeFish && item.isIn(ItemTags.FISHES))
-                return item.getItem().getFoodComponent().getHunger() * 10;
+    public static int getFoodPoints(@NotNull ItemStack stack, boolean meatOnly, boolean includeFish) {
+        FoodComponent food = stack.get(DataComponentTypes.FOOD);
+        if (stack != ItemStack.EMPTY && stack.getItem() != null && food != null)
+            if (!meatOnly || stack.isIn(ItemTags.MEAT) || includeFish && stack.isIn(ItemTags.FISHES))
+                return food.nutrition() * 10;
         return 0;
     }
 }

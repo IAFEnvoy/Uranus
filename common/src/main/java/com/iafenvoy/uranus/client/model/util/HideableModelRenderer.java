@@ -22,11 +22,11 @@ public class HideableModelRenderer extends AdvancedModelBox {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(MatrixStack matrixStack, VertexConsumer consumer, int light, int overlay, int color) {
         if (this.invisible)
-            this.invisibleRender(matrixStack, consumer, light, overlay, red, green, blue, alpha);
+            this.invisibleRender(matrixStack, consumer, light, overlay, color);
         else
-            super.render(matrixStack, consumer, light, overlay, red, green, blue, alpha);
+            super.render(matrixStack, consumer, light, overlay, color);
     }
 
     public void copyFrom(BasicModelPart currentModel) {
@@ -36,14 +36,14 @@ public class HideableModelRenderer extends AdvancedModelBox {
         this.rotationPointZ = currentModel.rotationPointZ;
     }
 
-    public void invisibleRender(MatrixStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void invisibleRender(MatrixStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.showModel && (!this.cubeList.isEmpty() || !this.childModels.isEmpty())) {
             matrixStackIn.push();
             this.translateAndRotate(matrixStackIn);
             if (!this.scaleChildren)
                 matrixStackIn.scale(1.0F / Math.max(this.scaleX, 1.0E-4F), 1.0F / Math.max(this.scaleY, 1.0E-4F), 1.0F / Math.max(this.scaleZ, 1.0E-4F));
             for (BasicModelPart renderer : this.childModels)
-                renderer.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+                renderer.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, color);
             matrixStackIn.pop();
         }
     }

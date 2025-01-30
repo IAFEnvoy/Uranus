@@ -66,9 +66,9 @@ public class ChunkCache implements WorldView {
         for (int k = this.chunkX; k <= i; ++k)
             for (int l = this.chunkZ; l <= j; ++l)
                 if (WorldChunkUtil.isEntityChunkLoaded(this.world, new ChunkPos(k, l)) && worldIn.getChunkManager() instanceof ServerChunkManager serverChunkCache) {
-                    final ChunkHolder holder = serverChunkCache.threadedAnvilChunkStorage.getChunkHolder(ChunkPos.toLong(k, l));
+                    final ChunkHolder holder = serverChunkCache.chunkLoadingManager.getChunkHolder(ChunkPos.toLong(k, l));
                     if (holder != null)
-                        this.chunkArray[k - this.chunkX][l - this.chunkZ] = holder.getAccessibleFuture().getNow(ChunkHolder.UNLOADED_WORLD_CHUNK).left().orElse(null);
+                        this.chunkArray[k - this.chunkX][l - this.chunkZ] = holder.getAccessibleFuture().getNow(ChunkHolder.UNLOADED_WORLD_CHUNK).orElse(null);
                 }
         this.dimType = type;
         this.minBuildHeight = worldIn.getBottomY();

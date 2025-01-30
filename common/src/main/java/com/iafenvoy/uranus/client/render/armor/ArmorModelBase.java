@@ -58,26 +58,26 @@ public class ArmorModelBase extends BipedEntityModel<LivingEntity> {
     }
 
     public void renderHelmet(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Identifier texture) {
-        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), false, stack.hasGlint());
-        this.head.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), stack.hasGlint());
+        this.head.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, -1);
     }
 
     public void renderChestplate(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Identifier texture) {
-        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), false, stack.hasGlint());
-        this.body.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
-        this.leftArm.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
-        this.rightArm.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), stack.hasGlint());
+        this.body.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, -1);
+        this.leftArm.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, -1);
+        this.rightArm.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, -1);
     }
 
     public void renderLeggings(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Identifier texture) {
-        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), false, stack.hasGlint());
-        this.leftLeg.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
-        this.rightLeg.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), stack.hasGlint());
+        this.leftLeg.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, -1);
+        this.rightLeg.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, -1);
     }
 
     public void renderBoots(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Identifier texture) {
-        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), false, stack.hasGlint());
-        this.leftLeg.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
-        this.rightLeg.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+        VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(texture), stack.hasGlint());
+        this.leftLeg.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, -1);
+        this.rightLeg.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, -1);
     }
 }

@@ -36,7 +36,7 @@ public class JsonUtils {
     }
 
     public static Item getByNameOrId(String id) {
-        return Registries.ITEM.get(new Identifier(id));
+        return Registries.ITEM.get(Identifier.tryParse(id));
     }
 
     public static Item getItem(JsonElement json, String memberName) {

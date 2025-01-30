@@ -118,33 +118,6 @@ public class PacketBufferUtils {
     }
 
     /**
-     * Write an {@link ItemStack} using minecraft compatible encoding.
-     *
-     * @param to    The buffer to write to
-     * @param stack The itemstack to write
-     */
-    public static void writeItemStack(ByteBuf to, ItemStack stack) {
-        PacketByteBuf pb = new PacketByteBuf(to);
-        pb.writeItemStack(stack);
-    }
-
-    /**
-     * Read an {@link ItemStack} from the byte buffer provided. It uses the minecraft encoding.
-     *
-     * @param from The buffer to read from
-     * @return The itemstack read
-     */
-    public static ItemStack readItemStack(ByteBuf from) {
-        PacketByteBuf pb = new PacketByteBuf(from);
-        try {
-            return pb.readItemStack();
-        } catch (Exception e) {
-            // Unpossible?
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Write an {@link NbtCompound} to the byte buffer. It uses the minecraft encoding.
      *
      * @param to  The buffer to write to

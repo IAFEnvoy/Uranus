@@ -3,6 +3,7 @@ package com.iafenvoy.uranus.object.item;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 public abstract class ArmorWithTickItem extends ArmorItem {
     private static final List<ArmorWithTickItem> NEED_TO_TICK = new ArrayList<>();
 
-    public ArmorWithTickItem(ArmorMaterial material, Type slot, Settings settings) {
+    public ArmorWithTickItem(RegistryEntry<ArmorMaterial> material, Type slot, Settings settings) {
         super(material, slot, settings);
         NEED_TO_TICK.add(this);
     }

@@ -37,7 +37,7 @@ public interface IArmorRendererBase<T extends LivingEntity> {
         armorModel.leftLeg.visible = slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
         armorModel.rightLeg.visible = slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
         VertexConsumer consumer = vertexConsumers.getBuffer(RenderLayer.getArmorCutoutNoCull(this.getArmorTexture(stack, entity, slot)));
-        armorModel.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+        armorModel.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, -1);
     }
 
     static <T extends LivingEntity> void register(IArmorRendererBase<T> renderer, ItemConvertible... items) {

@@ -130,18 +130,18 @@ public class BasicModelRenderer<T extends Entity> {
     }
 
     public void render(MatrixStack p_228308_1_, VertexConsumer p_228308_2_, int p_228308_3_, int p_228308_4_) {
-        this.render(p_228308_1_, p_228308_2_, p_228308_3_, p_228308_4_, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.render(p_228308_1_, p_228308_2_, p_228308_3_, p_228308_4_, -1);
     }
 
-    public void render(MatrixStack p_228309_1_, VertexConsumer p_228309_2_, int p_228309_3_, int p_228309_4_, float p_228309_5_, float p_228309_6_, float p_228309_7_, float p_228309_8_) {
+    public void render(MatrixStack p_228309_1_, VertexConsumer p_228309_2_, int p_228309_3_, int p_228309_4_, int color) {
         if (this.showModel) {
             if (!this.cubeList.isEmpty() || !this.childModels.isEmpty()) {
                 p_228309_1_.push();
                 this.translateRotate(p_228309_1_);
-                this.doRender(p_228309_1_.peek(), p_228309_2_, p_228309_3_, p_228309_4_, p_228309_5_, p_228309_6_, p_228309_7_, p_228309_8_);
+                this.doRender(p_228309_1_.peek(), p_228309_2_, p_228309_3_, p_228309_4_, color);
 
                 for (BasicModelRenderer<T> lvt_10_1_ : this.childModels)
-                    lvt_10_1_.render(p_228309_1_, p_228309_2_, p_228309_3_, p_228309_4_, p_228309_5_, p_228309_6_, p_228309_7_, p_228309_8_);
+                    lvt_10_1_.render(p_228309_1_, p_228309_2_, p_228309_3_, p_228309_4_, color);
 
                 p_228309_1_.pop();
             }
@@ -155,7 +155,7 @@ public class BasicModelRenderer<T extends Entity> {
         if (this.rotateAngleX != 0.0F) p_228307_1_.multiply(RotationAxis.POSITIVE_X.rotation(this.rotateAngleX));
     }
 
-    private void doRender(MatrixStack.Entry p_228306_1_, VertexConsumer p_228306_2_, int p_228306_3_, int p_228306_4_, float p_228306_5_, float p_228306_6_, float p_228306_7_, float p_228306_8_) {
+    private void doRender(MatrixStack.Entry p_228306_1_, VertexConsumer p_228306_2_, int p_228306_3_, int p_228306_4_, int color) {
         Matrix4f lvt_9_1_ = p_228306_1_.getPositionMatrix();
         Matrix3f lvt_10_1_ = p_228306_1_.getNormalMatrix();
 
@@ -176,7 +176,7 @@ public class BasicModelRenderer<T extends Entity> {
                     float lvt_25_1_ = lvt_22_1_.position.z() / 16.0F;
                     Vector4f lvt_26_1_ = new Vector4f(lvt_23_1_, lvt_24_1_, lvt_25_1_, 1.0F);
                     lvt_26_1_.mul(lvt_9_1_);
-                    p_228306_2_.vertex(lvt_26_1_.x(), lvt_26_1_.y(), lvt_26_1_.z(), p_228306_5_, p_228306_6_, p_228306_7_, p_228306_8_, lvt_22_1_.textureU, lvt_22_1_.textureV, p_228306_4_, p_228306_3_, lvt_18_1_, lvt_19_1_, lvt_20_1_);
+                    p_228306_2_.vertex(lvt_26_1_.x(), lvt_26_1_.y(), lvt_26_1_.z(), color, lvt_22_1_.textureU, lvt_22_1_.textureV, p_228306_4_, p_228306_3_, lvt_18_1_, lvt_19_1_, lvt_20_1_);
                 }
             }
         }

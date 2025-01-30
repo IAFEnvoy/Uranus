@@ -7,8 +7,8 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.world.World;
 
 public class SwordItemBase extends SwordItem implements ISwingable {
-    public SwordItemBase(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings);
+    public SwordItemBase(ToolMaterial toolMaterial, Settings settings) {
+        super(toolMaterial, settings);
     }
 
     public boolean onEntitySwing(ItemStack itemtack, Entity entity) {

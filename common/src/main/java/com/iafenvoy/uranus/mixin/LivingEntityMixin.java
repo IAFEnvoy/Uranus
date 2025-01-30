@@ -33,8 +33,8 @@ public abstract class LivingEntityMixin extends Entity implements IUranusDataEnt
     }
 
     @Inject(at = @At("TAIL"), method = "initDataTracker")
-    private void registerData(CallbackInfo ci) {
-        this.dataTracker.startTracking(URANUS_DATA, new NbtCompound());
+    private void registerData(DataTracker.Builder builder, CallbackInfo ci) {
+        builder.add(URANUS_DATA, new NbtCompound());
     }
 
     @Inject(at = @At("TAIL"), method = "writeCustomDataToNbt")

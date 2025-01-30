@@ -1,10 +1,8 @@
 package com.iafenvoy.uranus.animation;
 
 import com.iafenvoy.uranus.ServerHelper;
-import com.iafenvoy.uranus.StaticVariables;
-import com.iafenvoy.uranus.network.PacketBufferUtils;
+import com.iafenvoy.uranus.network.AnimationPayload;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.PacketByteBuf;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
@@ -24,9 +22,7 @@ public enum AnimationHandler {
     public <T extends Entity & IAnimatedEntity> void sendAnimationMessage(T entity, Animation animation) {
         if (entity.getWorld().isClient) return;
         entity.setAnimation(animation);
-        PacketByteBuf buf = PacketBufferUtils.create();
-        buf.writeInt(entity.getId()).writeInt(ArrayUtils.indexOf(entity.getAnimations(), animation));
-        ServerHelper.sendToAll(StaticVariables.ANIMATION, buf);
+        ServerHelper.sendToAll(new AnimationPayload(entity.getId(), ArrayUtils.indexOf(entity.getAnimations(), animation)));
     }
 
     /**

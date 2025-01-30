@@ -198,24 +198,24 @@ public class AdvancedModelBox extends BasicModelPart {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(MatrixStack matrixStack, VertexConsumer consumer, int light, int overlay, int color) {
         if (this.showModel)
             if (!this.cubeList.isEmpty() || !this.childModels.isEmpty()) {
                 matrixStack.push();
                 this.translateAndRotate(matrixStack);
-                this.doRender(matrixStack.peek(), consumer, light, overlay, red, green, blue, alpha);
+                this.doRender(matrixStack.peek(), consumer, light, overlay, color);
                 ObjectListIterator<BasicModelPart> var9 = this.childModels.iterator();
                 if (!this.scaleChildren)
                     matrixStack.scale(1F / Math.max(this.scaleX, 0.0001F), 1F / Math.max(this.scaleY, 0.0001F), 1F / Math.max(this.scaleZ, 0.0001F));
                 while (var9.hasNext()) {
                     BasicModelPart lvt_10_1_ = var9.next();
-                    lvt_10_1_.render(matrixStack, consumer, light, overlay, red, green, blue, alpha);
+                    lvt_10_1_.render(matrixStack, consumer, light, overlay, color);
                 }
                 matrixStack.pop();
             }
     }
 
-    private void doRender(MatrixStack.Entry entry, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    private void doRender(MatrixStack.Entry entry, VertexConsumer consumer, int light, int overlay, int color) {
         Matrix4f lvt_9_1_ = entry.getPositionMatrix();
         Matrix3f lvt_10_1_ = entry.getNormalMatrix();
 
@@ -234,7 +234,7 @@ public class AdvancedModelBox extends BasicModelPart {
                     float z = vertexPosition.position.z() / 16.0F;
                     Vector4f vector4f = new Vector4f(x, y, z, 1.0F);
                     vector4f.mul(lvt_9_1_);
-                    consumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), red, green, blue, alpha, vertexPosition.textureU, vertexPosition.textureV, overlay, light, normalX, normalY, normalZ);
+                    consumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), color, vertexPosition.textureU, vertexPosition.textureV, overlay, light, normalX, normalY, normalZ);
                 }
             }
         }

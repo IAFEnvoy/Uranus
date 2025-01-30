@@ -33,9 +33,9 @@ public class WorldChunkUtil {
      */
     public static boolean isChunkLoaded(final WorldAccess world, final int x, final int z) {
         if (world.getChunkManager() instanceof ServerChunkManager serverChunkManager) {
-            final ChunkHolder holder = serverChunkManager.threadedAnvilChunkStorage.getChunkHolder(ChunkPos.toLong(x, z));
+            final ChunkHolder holder = serverChunkManager.chunkLoadingManager.getChunkHolder(ChunkPos.toLong(x, z));
             if (holder != null)
-                return holder.getAccessibleFuture().getNow(ChunkHolder.UNLOADED_WORLD_CHUNK).left().isPresent();
+                return holder.getAccessibleFuture().getNow(ChunkHolder.UNLOADED_WORLD_CHUNK).isPresent();
             return false;
         }
         return world.getChunk(x, z, ChunkStatus.FULL, false) != null;
