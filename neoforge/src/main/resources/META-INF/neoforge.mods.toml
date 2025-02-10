@@ -36,3 +36,5 @@ side = "BOTH"
 
 [[mixins]]
 config = "uranus.mixins.json"
+[[mixins]]
+config = "uranus-neoforge.mixins.json"
