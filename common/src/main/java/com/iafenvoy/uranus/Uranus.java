@@ -1,7 +1,9 @@
 package com.iafenvoy.uranus;
 
+import com.iafenvoy.uranus.network.AnimationPayload;
 import com.iafenvoy.uranus.util.Timeout;
 import com.mojang.logging.LogUtils;
+import dev.architectury.networking.NetworkManager;
 import dev.architectury.platform.Platform;
 import org.slf4j.Logger;
 
@@ -14,5 +16,7 @@ public class Uranus {
 
         if (!Platform.isModLoaded("sponsor_core"))
             throw new RuntimeException("Cannot find Sponsor Core, please re-download " + MOD_ID + " or contact author.");
+
+        NetworkManager.registerS2CPayloadType(AnimationPayload.ID, AnimationPayload.CODEC);
     }
 }
