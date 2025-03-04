@@ -39,8 +39,6 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
-
-    modImplementation(include("com.iafenvoy.sponsor:sponsor_core:1.0.0-fabric"))
 }
 
 processResources {

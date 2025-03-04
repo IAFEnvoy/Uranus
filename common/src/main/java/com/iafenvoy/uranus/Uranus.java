@@ -16,8 +16,5 @@ public class Uranus {
         Timeout.startTimeout();
         if (Platform.getEnvironment() == Env.SERVER)
             NetworkManager.registerS2CPayloadType(AnimationPayload.ID, AnimationPayload.CODEC);
-
-        if (!Platform.isModLoaded("sponsor_core"))
-            throw new RuntimeException("Cannot find Sponsor Core, please re-download " + MOD_ID + " or contact author.");
     }
 }

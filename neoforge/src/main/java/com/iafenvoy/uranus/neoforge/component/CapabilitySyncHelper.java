@@ -2,6 +2,7 @@ package com.iafenvoy.uranus.neoforge.component;
 
 import com.iafenvoy.uranus.Uranus;
 import dev.architectury.networking.NetworkManager;
+import dev.architectury.platform.Platform;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
@@ -61,17 +62,20 @@ public class CapabilitySyncHelper {
         }
     }
 
+    static {
+        if (Platform.getEnv() == Dist.DEDICATED_SERVER)
+            NetworkManager.registerS2CPayloadType(CapabilitySyncPayload.ID, CapabilitySyncPayload.CODEC);
+    }
+
     @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientEvents {
         @SubscribeEvent
         public static void init(FMLClientSetupEvent event) {
-            NetworkManager.registerReceiver(NetworkManager.Side.S2C, CapabilitySyncPayload.ID, CapabilitySyncPayload.CODEC, (payload, ctx) -> {
-                PLAYERS.stream().filter(x -> x.id.equals(payload.id())).findFirst().ifPresent(holder -> ctx.queue(() -> {
-                    ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                    if (player != null)
-                        player.getData(holder.attachmentType).deserializeNBT(payload.compound());
-                }));
-            });
+            NetworkManager.registerReceiver(NetworkManager.Side.S2C, CapabilitySyncPayload.ID, CapabilitySyncPayload.CODEC, (payload, ctx) -> PLAYERS.stream().filter(x -> x.id.equals(payload.id())).findFirst().ifPresent(holder -> ctx.queue(() -> {
+                ClientPlayerEntity player = MinecraftClient.getInstance().player;
+                if (player != null)
+                    player.getData(holder.attachmentType).deserializeNBT(payload.compound());
+            })));
         }
     }
 
