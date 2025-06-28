@@ -11,7 +11,7 @@ authors = "IAFEnvoy"
 description = '''
 A Library contains animation engine, object helper and so on. Partly based on LLibrary and Citadel.
 '''
-logoFile = "logo.jpg"
+logoFile = "logo.png"
 
 [[dependencies.uranus]]
 modId = "neoforge"

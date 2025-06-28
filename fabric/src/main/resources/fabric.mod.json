@@ -11,7 +11,7 @@
     "repo": "https://github.com/IAFEnvoy/Uranus"
   },
   "license": "LGPL-3.0",
-  "icon": "logo.jpg",
+  "icon": "logo.png",
   "environment": "*",
   "entrypoints": {
     "client": [
