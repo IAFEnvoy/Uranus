@@ -8,6 +8,7 @@ loom {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
         mixinConfig "uranus.mixins.json"
+        mixinConfig "uranus-forge.mixins.json"
     }
 }
 
