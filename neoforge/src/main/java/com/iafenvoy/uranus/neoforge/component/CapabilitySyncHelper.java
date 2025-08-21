@@ -17,17 +17,17 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public class CapabilitySyncHelper {
     public static final Identifier CAPABILITY_SYNC = Identifier.of(Uranus.MOD_ID, "capability_sync");
     private static final List<LivingCapabilityHolder<? extends IAttachment>> LIVINGS = new ArrayList<>();
+    private static final Map<UUID, List<ServerPlayerEntity>> TRACKING_PLAYERS = new HashMap<>();
 
     public static <T extends IAttachment> void registerForLiving(Identifier id, AttachmentType<T> capability) {
         LIVINGS.add(new LivingCapabilityHolder<>(id, capability));
@@ -42,23 +42,51 @@ public class CapabilitySyncHelper {
     }
 
     @SubscribeEvent
+    public static void onStartTracking(PlayerEvent.StartTracking event) {
+        Entity target = event.getTarget();
+        if (event.getEntity() instanceof ServerPlayerEntity serverPlayer) {
+            TRACKING_PLAYERS.computeIfAbsent(target.getUuid(), uuid -> new LinkedList<>()).add(serverPlayer);
+            for (LivingCapabilityHolder<? extends IAttachment> holder : LIVINGS) {
+                IAttachment attachment = target.getData(holder.attachmentType);
+                syncToPlayers(target, holder.id, attachment.serializeNBT());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onStopTracking(PlayerEvent.StopTracking event) {
+        if (event.getEntity() instanceof ServerPlayerEntity serverPlayer) {
+            UUID uuid = event.getEntity().getUuid();
+            List<ServerPlayerEntity> players = TRACKING_PLAYERS.get(uuid);
+            if (players == null) return;
+            players.remove(serverPlayer);
+            if (players.isEmpty()) TRACKING_PLAYERS.remove(uuid);
+        }
+    }
+
+    @SubscribeEvent
     public static void onLivingTick(EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof LivingEntity living)) return;
         World world = living.getWorld();
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerWorld) {
             for (LivingCapabilityHolder<? extends IAttachment> holder : LIVINGS) {
                 IAttachment attachment = living.getData(holder.attachmentType);
                 if (attachment instanceof ITickableAttachment tickable) {
                     tickable.tick();
                     if (tickable.isDirty())
-                        syncToNearbyPlayers(serverWorld, living, holder.id, attachment.serializeNBT());
+                        syncToPlayers(living, holder.id, attachment.serializeNBT());
                 }
             }
         }
     }
 
-    private static void syncToNearbyPlayers(ServerWorld world, LivingEntity entity, Identifier id, NbtCompound compound) {
-        for (ServerPlayerEntity player : world.getPlayers(x -> x.isAlive() && x.getPos().distanceTo(entity.getPos()) <= 64))
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event) {
+        TRACKING_PLAYERS.remove(event.getEntity().getUuid());
+    }
+
+    private static void syncToPlayers(Entity entity, Identifier id, NbtCompound compound) {
+        for (ServerPlayerEntity player : TRACKING_PLAYERS.getOrDefault(entity.getUuid(), new LinkedList<>()))
             NetworkManager.sendToPlayer(player, new CapabilitySyncPayload(id, entity.getId(), compound));
     }
 
