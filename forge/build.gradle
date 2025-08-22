@@ -42,8 +42,6 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
-
-    modImplementation(include("com.iafenvoy.sponsor:sponsor_core:1.0.0-forge"))
 }
 
 processResources {
