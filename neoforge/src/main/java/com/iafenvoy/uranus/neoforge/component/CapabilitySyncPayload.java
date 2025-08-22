@@ -9,6 +9,7 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
+@Deprecated(forRemoval = true)
 public record CapabilitySyncPayload(Identifier id, int entityId, NbtCompound compound) implements CustomPayload {
     public static final Id<CapabilitySyncPayload> ID = new Id<>(CapabilitySyncHelper.CAPABILITY_SYNC);
     public static final PacketCodec<ByteBuf, CapabilitySyncPayload> CODEC = PacketCodecs.codec(RecordCodecBuilder.create(i -> i.group(

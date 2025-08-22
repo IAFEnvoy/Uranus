@@ -23,6 +23,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import java.util.*;
 
+@Deprecated(forRemoval = true)
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public class CapabilitySyncHelper {
     public static final Identifier CAPABILITY_SYNC = Identifier.of(Uranus.MOD_ID, "capability_sync");
