@@ -11,8 +11,5 @@ public class Uranus {
 
     public static void init() {
         Timeout.startTimeout();
-
-        if (!Platform.isModLoaded("sponsor_core"))
-            throw new RuntimeException("Cannot find Sponsor Core, please re-download " + MOD_ID + " or contact author.");
     }
 }
