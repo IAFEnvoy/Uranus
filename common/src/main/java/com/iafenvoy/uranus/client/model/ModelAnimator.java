@@ -7,6 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -23,7 +24,7 @@ public class ModelAnimator {
     private boolean correctAnimation;
     private IAnimatedEntity entity;
 
-    public ModelAnimator() {
+    protected ModelAnimator() {
         this.tempTick = 0;
         this.correctAnimation = false;
         this.transformMap = new HashMap<>();
@@ -38,10 +39,30 @@ public class ModelAnimator {
     }
 
     /**
-     * @return the {@link IAnimatedEntity} instance. Null if {@link ModelAnimator#update} has never been called.
+     * @return the {@link IAnimatedEntity} instance. Null if not start animate.
      */
     public IAnimatedEntity getEntity() {
         return this.entity;
+    }
+
+    /**
+     * Start update the animations of this model.
+     *
+     * @param entity the entity instance
+     */
+    public void startAnimate(@NotNull IAnimatedEntity entity) {
+        this.tempTick = this.prevTempTick = 0;
+        this.correctAnimation = false;
+        this.entity = entity;
+        this.transformMap.clear();
+        this.prevTransformMap.clear();
+    }
+
+    /**
+     * End update the animations of this model.
+     */
+    public void endAnimate() {
+        this.entity = null;
     }
 
     /**
@@ -49,12 +70,10 @@ public class ModelAnimator {
      *
      * @param entity the entity instance
      */
+    @Deprecated(forRemoval = true)
     public void update(IAnimatedEntity entity) {
-        this.tempTick = this.prevTempTick = 0;
-        this.correctAnimation = false;
-        this.entity = entity;
-        this.transformMap.clear();
-        this.prevTransformMap.clear();
+        if (entity != null) this.startAnimate(entity);
+        else this.endAnimate();
     }
 
     /**
@@ -64,6 +83,7 @@ public class ModelAnimator {
      * @return true if it's the current model
      */
     public boolean setAnimation(Animation animation) {
+        if (this.entity == null) throw new IllegalStateException("Not start animate yet!");
         this.tempTick = this.prevTempTick = 0;
         this.correctAnimation = this.entity.getAnimation() == animation;
         return this.correctAnimation;
@@ -75,6 +95,7 @@ public class ModelAnimator {
      * @param duration the keyframe duration
      */
     public void startKeyframe(int duration) {
+        if (this.entity == null) throw new IllegalStateException("Not start animate yet!");
         if (!this.correctAnimation) {
             return;
         }
@@ -88,6 +109,7 @@ public class ModelAnimator {
      * @param duration the keyframe duration
      */
     public void setStaticKeyframe(int duration) {
+        if (this.entity == null) throw new IllegalStateException("Not start animate yet!");
         this.startKeyframe(duration);
         this.endKeyframe(true);
     }
@@ -98,6 +120,7 @@ public class ModelAnimator {
      * @param duration the keyframe duration
      */
     public void resetKeyframe(int duration) {
+        if (this.entity == null) throw new IllegalStateException("Not start animate yet!");
         this.startKeyframe(duration);
         this.endKeyframe();
     }
@@ -111,9 +134,8 @@ public class ModelAnimator {
      * @param z   the z rotation
      */
     public void rotate(AdvancedModelBox box, float x, float y, float z) {
-        if (!this.correctAnimation) {
-            return;
-        }
+        if (this.entity == null) throw new IllegalStateException("Not start animate yet!");
+        if (!this.correctAnimation) return;
         this.getTransform(box).addRotation(x, y, z);
     }
 
@@ -126,9 +148,8 @@ public class ModelAnimator {
      * @param z   the z offset
      */
     public void move(AdvancedModelBox box, float x, float y, float z) {
-        if (!this.correctAnimation) {
-            return;
-        }
+        if (this.entity == null) throw new IllegalStateException("Not start animate yet!");
+        if (!this.correctAnimation) return;
         this.getTransform(box).addOffset(x, y, z);
     }
 
@@ -144,11 +165,10 @@ public class ModelAnimator {
     }
 
     private void endKeyframe(boolean stationary) {
-        if (!this.correctAnimation) {
-            return;
-        }
-        int animationTick = this.entity.getAnimationTick();
+        if (this.entity == null) throw new IllegalStateException("Not start animate yet!");
+        if (!this.correctAnimation) return;
 
+        int animationTick = this.entity.getAnimationTick();
         if (animationTick >= this.prevTempTick && animationTick < this.tempTick) {
             if (stationary) {
                 for (AdvancedModelBox box : this.prevTransformMap.keySet()) {
