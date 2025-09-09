@@ -3,7 +3,7 @@ package com.iafenvoy.uranus.object.entity.pathfinding.raycoms;
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
 
-import com.iafenvoy.uranus.server.world.WorldChunkUtil;
+import com.iafenvoy.uranus.world.WorldChunkUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;

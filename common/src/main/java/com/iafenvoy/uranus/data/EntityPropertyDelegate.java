@@ -2,6 +2,7 @@ package com.iafenvoy.uranus.data;
 
 import net.minecraft.screen.PropertyDelegate;
 
+@Deprecated(forRemoval = true)
 public class EntityPropertyDelegate implements PropertyDelegate {
     public int entityId = -1;
 

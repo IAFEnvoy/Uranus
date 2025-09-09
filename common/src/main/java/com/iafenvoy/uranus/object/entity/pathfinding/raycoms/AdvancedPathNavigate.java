@@ -8,7 +8,7 @@ import com.iafenvoy.uranus.object.entity.pathfinding.raycoms.pathjobs.AbstractPa
 import com.iafenvoy.uranus.object.entity.pathfinding.raycoms.pathjobs.PathJobMoveAwayFromLocation;
 import com.iafenvoy.uranus.object.entity.pathfinding.raycoms.pathjobs.PathJobMoveToLocation;
 import com.iafenvoy.uranus.object.entity.pathfinding.raycoms.pathjobs.PathJobRandomPos;
-import com.iafenvoy.uranus.server.world.WorldChunkUtil;
+import com.iafenvoy.uranus.world.WorldChunkUtil;
 import com.iafenvoy.uranus.object.BlockUtil;
 import net.minecraft.block.LadderBlock;
 import net.minecraft.entity.Entity;

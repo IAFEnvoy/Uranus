@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 
+@Deprecated(forRemoval = true)
 public class FoilSwordItemBase extends SwordItemBase {
     public FoilSwordItemBase(ToolMaterial toolMaterial, Settings settings) {
         super(toolMaterial, settings);

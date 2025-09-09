@@ -28,6 +28,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
         super(context);
     }
 
+    @Deprecated(forRemoval = true)
     @ModifyExpressionValue(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArmorMaterial$Layer;getTexture(Z)Lnet/minecraft/util/Identifier;"))
     private Identifier pushTexture(Identifier original,
                                    @Local(ordinal = 0) ItemStack itemStack,

@@ -11,12 +11,15 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public interface IArmorRendererBase<T extends LivingEntity> {
@@ -24,7 +27,13 @@ public interface IArmorRendererBase<T extends LivingEntity> {
 
     BipedEntityModel<T> getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, BipedEntityModel<T> defaultModel);
 
-    Identifier getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot);
+    default Identifier getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot) {
+        if (stack.getItem() instanceof ArmorItem armor) {
+            List<ArmorMaterial.Layer> layers = armor.getMaterial().value().layers();
+            if (!layers.isEmpty()) return layers.getFirst().getTexture(slot == EquipmentSlot.LEGS);
+        }
+        return Identifier.ofVanilla("missingno");
+    }
 
     default void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, LivingEntity entity, EquipmentSlot slot, int light, ItemStack stack, BipedEntityModel<T> defaultModel) {
         BipedEntityModel<T> armorModel = this.getHumanoidArmorModel(entity, stack, slot, defaultModel);

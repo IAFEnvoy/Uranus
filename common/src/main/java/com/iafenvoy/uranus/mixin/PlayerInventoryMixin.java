@@ -16,6 +16,7 @@ public class PlayerInventoryMixin {
     @Shadow
     public PlayerEntity player;
 
+    @Deprecated(forRemoval = true)
     @Inject(method = "updateItems", at = @At("RETURN"))
     private void onInventoryTick(CallbackInfo ci) {
         ArmorWithTickItem.doTick(player.getWorld(), player);

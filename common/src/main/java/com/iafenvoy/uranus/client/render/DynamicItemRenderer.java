@@ -15,5 +15,6 @@ import java.util.Map;
 @Environment(EnvType.CLIENT)
 public interface DynamicItemRenderer {
     Map<Item, DynamicItemRenderer> RENDERERS = new HashMap<>();
+
     void render(ItemStack var1, ModelTransformationMode var2, MatrixStack var3, VertexConsumerProvider var4, int var5, int var6);
 }

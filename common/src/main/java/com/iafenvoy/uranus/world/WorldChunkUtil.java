@@ -1,4 +1,4 @@
-package com.iafenvoy.uranus.server.world;
+package com.iafenvoy.uranus.world;
 
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ServerChunkManager;

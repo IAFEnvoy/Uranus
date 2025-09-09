@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.function.Function;
 
+@Deprecated(forRemoval = true)
 public class FoilItemBase extends ItemBase {
     public FoilItemBase(Function<Settings, Settings> properties) {
         super(properties);
