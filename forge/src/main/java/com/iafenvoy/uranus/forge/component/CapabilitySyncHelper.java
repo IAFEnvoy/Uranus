@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -69,25 +70,24 @@ public class CapabilitySyncHelper {
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
         LivingEntity living = event.getEntity();
-        for (LivingCapabilityHolder<?, ? extends ITickableCapability> holder : LIVINGS) {
-            Optional<? extends ITickableCapability> optional = living.getCapability(holder.capability).resolve();
-            if (optional.isEmpty()) continue;
-            ITickableCapability capability = optional.get();
-            capability.tick();
-        }
+        for (LivingCapabilityHolder<?, ? extends ITickableCapability> holder : LIVINGS)
+            tickSingle(living, holder.id, holder.capability);
     }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
-        for (PlayerCapabilityHolder<?, ? extends ITickableCapability> holder : PLAYERS) {
-            Optional<? extends ITickableCapability> optional = player.getCapability(holder.capability).resolve();
-            if (optional.isEmpty()) continue;
-            ITickableCapability capability = optional.get();
-            capability.tick();
-            if (capability.isDirty() && player instanceof ServerPlayerEntity serverPlayer)
-                NetworkManager.sendToPlayer(serverPlayer, CAPABILITY_SYNC, PacketBufferUtils.create().writeIdentifier(holder.id).writeNbt(capability.serializeNBT()));
-        }
+        for (PlayerCapabilityHolder<?, ? extends ITickableCapability> holder : PLAYERS)
+            tickSingle(player, holder.id, holder.capability);
+    }
+
+    private static <T extends ITickableCapability> void tickSingle(LivingEntity entity, Identifier id, Capability<T> capabilityType) {
+        Optional<? extends ITickableCapability> optional = entity.getCapability(capabilityType).resolve();
+        if (optional.isEmpty()) return;
+        ITickableCapability capability = optional.get();
+        capability.tick();
+        if (capability.isDirty() && entity.getWorld() instanceof ServerWorld world)
+            NetworkManager.collectPackets(packet -> world.getChunkManager().sendToNearbyPlayers(entity, packet), NetworkManager.Side.S2C, CAPABILITY_SYNC, PacketBufferUtils.create().writeIdentifier(id).writeNbt(capability.serializeNBT()));
     }
 
     @SubscribeEvent
