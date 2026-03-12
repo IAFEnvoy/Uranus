@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -24,6 +25,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,14 @@ public class CapabilitySyncHelper {
         PLAYERS.add(new PlayerCapabilityHolder<>(id, capability, constructor, copyPolicy));
     }
 
+    private static PacketByteBuf packSyncBuf(@Nullable Entity target, Identifier id, NbtCompound nbt) {
+        PacketByteBuf buf = PacketBufferUtils.create();
+        buf.writeInt(target == null ? -1 : target.getId());
+        buf.writeIdentifier(id);
+        buf.writeNbt(nbt);
+        return buf;
+    }
+
     @SubscribeEvent
     public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof LivingEntity living)
@@ -64,7 +74,7 @@ public class CapabilitySyncHelper {
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayerEntity serverPlayer)
             for (PlayerCapabilityHolder<?, ?> holder : PLAYERS)
-                serverPlayer.getCapability(holder.capability).resolve().ifPresent(storage -> NetworkManager.sendToPlayer(serverPlayer, CAPABILITY_SYNC, PacketBufferUtils.create().writeIdentifier(holder.id).writeNbt(storage.serializeNBT())));
+                serverPlayer.getCapability(holder.capability).resolve().ifPresent(storage -> NetworkManager.sendToPlayer(serverPlayer, CAPABILITY_SYNC, packSyncBuf(null, holder.id, storage.serializeNBT())));
     }
 
     @SubscribeEvent
@@ -87,7 +97,7 @@ public class CapabilitySyncHelper {
         ITickableCapability capability = optional.get();
         capability.tick();
         if (capability.isDirty() && entity.getWorld() instanceof ServerWorld world)
-            NetworkManager.collectPackets(packet -> world.getChunkManager().sendToNearbyPlayers(entity, packet), NetworkManager.Side.S2C, CAPABILITY_SYNC, PacketBufferUtils.create().writeIdentifier(id).writeNbt(capability.serializeNBT()));
+            NetworkManager.collectPackets(packet -> world.getChunkManager().sendToNearbyPlayers(entity, packet), NetworkManager.Side.S2C, CAPABILITY_SYNC, packSyncBuf(entity, id, capability.serializeNBT()));
     }
 
     @SubscribeEvent
@@ -107,13 +117,22 @@ public class CapabilitySyncHelper {
         @SubscribeEvent
         public static void init(FMLClientSetupEvent event) {
             NetworkManager.registerReceiver(NetworkManager.Side.S2C, CAPABILITY_SYNC, (buf, context) -> {
+                World world = MinecraftClient.getInstance().world;
+                if (world == null) return;
+                int entityId = buf.readInt();
+                Entity entity = entityId == -1 ? MinecraftClient.getInstance().player : world.getEntityById(entityId);
                 Identifier id = buf.readIdentifier();
                 NbtCompound compound = buf.readNbt();
-                PLAYERS.stream().filter(x -> x.id.equals(id)).findFirst().ifPresent(holder -> context.queue(() -> {
-                    ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                    if (player != null)
-                        player.getCapability(holder.capability).resolve().ifPresent(x -> x.deserializeNBT(compound));
-                }));
+                if (entity == null) Uranus.LOGGER.warn("Receive capability sync packet from unknown entity.");
+                else {
+                    Capability<? extends ITickableCapability> capability = LIVINGS.stream().filter(x -> x.id.equals(id)).findFirst().map(x -> x.capability).orElse(null);
+                    if (entity instanceof PlayerEntity && capability == null)
+                        capability = PLAYERS.stream().filter(x -> x.id.equals(id)).map(x -> x.capability).findFirst().orElse(null);
+                    if (capability != null)
+                        entity.getCapability(capability).resolve().ifPresent(x -> x.deserializeNBT(compound));
+                    else
+                        Uranus.LOGGER.warn("Receive capability sync packet for unknown capability for entity {}", entity);
+                }
             });
         }
     }
