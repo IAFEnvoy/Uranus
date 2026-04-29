@@ -334,6 +334,10 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         final BlockPos start = AbstractPathJob.prepareStart(this.ourEntity);
         this.desiredPos = new BlockPos(newX, newY, newZ);
 
+        if (start.subtract(this.desiredPos).toCenterPos().length() > 1e5) {
+            Uranus.LOGGER.warn("Entity {} tried to path to an invalid location {}, {}, {}, if you installed Sable you can ignore this message.", this.ourEntity, newX, newY, newZ);
+            return new PathResult();
+        }
         return this.setPathJob(
                 new PathJobMoveToLocation(this.ourEntity.getWorld(),
                         start,
