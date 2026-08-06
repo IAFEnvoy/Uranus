@@ -13,4 +13,9 @@ public abstract class MinecraftServerMixin {
     private void onServerCreated(CallbackInfo ci) {
         ServerHelper.server = (MinecraftServer) (Object) this;
     }
+
+    @Inject(method = "stop", at = @At("HEAD"))
+    private void onServerStopping(CallbackInfo ci) {
+        ServerHelper.server = null;
+    }
 }
