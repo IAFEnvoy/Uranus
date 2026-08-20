@@ -25,10 +25,10 @@ public class CustomCollisionsNodeProcessor extends WalkNodeEvaluator {
         if (pathnodetype == PathType.OPEN && j >= 1) {
             PathType nodes = getNodes(context, mutable.set(i, j - 1, k));
             pathnodetype = nodes != PathType.WALKABLE && nodes != PathType.OPEN && nodes != PathType.WATER && nodes != PathType.LAVA ? PathType.WALKABLE : PathType.OPEN;
-            if (nodes == PathType.DAMAGE_FIRE)
-                pathnodetype = PathType.DAMAGE_FIRE;
-            if (nodes == PathType.DAMAGE_OTHER)
-                pathnodetype = PathType.DAMAGE_OTHER;
+            if (nodes == PathType.FIRE)
+                pathnodetype = PathType.FIRE;
+            if (nodes == PathType.DAMAGING)
+                pathnodetype = PathType.DAMAGING;
             if (nodes == PathType.STICKY_HONEY)
                 pathnodetype = PathType.STICKY_HONEY;
         }

@@ -6,8 +6,6 @@ import com.iafenvoy.uranus.client.model.tabula.TabulaCubeContainer;
 import com.iafenvoy.uranus.client.model.tabula.TabulaCubeGroupContainer;
 import com.iafenvoy.uranus.client.model.tabula.TabulaModelContainer;
 import com.iafenvoy.uranus.util.function.MemorizeSupplier;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +18,6 @@ import java.util.Map;
  * @author gegy1000
  * @since 1.0.0
  */
-@OnlyIn(Dist.CLIENT)
 public class TabulaModel<T extends Entity> extends AdvancedEntityModel<T> {
     public final ModelAnimator animator;
     protected final Map<String, AdvancedModelBox> cubes = new HashMap<>();

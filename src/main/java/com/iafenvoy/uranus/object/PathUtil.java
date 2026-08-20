@@ -8,13 +8,13 @@ import net.minecraft.world.level.pathfinder.PathType;
 
 public class PathUtil {
     public static PathType getDanger(PathType type) {
-        return type == PathType.DAMAGE_FIRE || type == PathType.DANGER_FIRE ? PathType.DANGER_FIRE :
-                type == PathType.DAMAGE_OTHER || type == PathType.DANGER_OTHER ? PathType.DANGER_OTHER :
-                        type == PathType.LAVA ? PathType.DAMAGE_FIRE :
+        return type == PathType.DAMAGING || type == PathType.FIRE ? PathType.FIRE_IN_NEIGHBOR :
+                type == PathType.DAMAGING_IN_NEIGHBOR ? PathType.DAMAGING_IN_NEIGHBOR :
+                        type == PathType.LAVA ? PathType.FIRE :
                                 null;
     }
 
     public static PathType getAiPathNodeType(BlockState state, LevelReader level, BlockPos pos) {
-        return state.getBlock() == Blocks.LAVA ? PathType.LAVA : BlockUtil.isBurning(state) ? PathType.DAMAGE_FIRE : null;
+        return state.getBlock() == Blocks.LAVA ? PathType.LAVA : BlockUtil.isBurning(state) ? PathType.FIRE : null;
     }
 }

@@ -21,7 +21,7 @@ public enum AnimationHandler {
      * @param <T>       the entity type
      */
     public <T extends Entity & IAnimatedEntity> void sendAnimationMessage(T entity, Animation animation) {
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide()) return;
         entity.setAnimation(animation);
         PacketDistributor.sendToAllPlayers(new AnimationPayload(entity.getId(), ArrayUtils.indexOf(entity.getAnimations(), animation)));
     }

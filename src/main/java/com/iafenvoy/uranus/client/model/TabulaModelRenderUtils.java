@@ -1,11 +1,8 @@
 package com.iafenvoy.uranus.client.model;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
 
-@OnlyIn(Dist.CLIENT)
 public class TabulaModelRenderUtils {
     public record PositionTextureVertex(Vector3f position, float textureU, float textureV) {
         public PositionTextureVertex(float x, float y, float z, float u, float v) {

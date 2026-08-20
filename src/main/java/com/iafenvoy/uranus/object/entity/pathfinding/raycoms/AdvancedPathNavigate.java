@@ -11,7 +11,6 @@ import com.iafenvoy.uranus.object.entity.pathfinding.raycoms.pathjobs.PathJobRan
 import com.iafenvoy.uranus.world.WorldChunkUtil;
 import com.iafenvoy.uranus.object.BlockUtil;
 import net.minecraft.world.level.pathfinder.*;
-import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.util.Mth;
 import net.minecraft.core.*;
 import net.minecraft.world.phys.*;
@@ -285,7 +284,6 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
                 }
             }
 
-            DebugPackets.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.isDone()) {
                 assert this.path != null;
                 Vec3 vector3d2 = this.path.getNextEntityPos(this.mob);
@@ -509,7 +507,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
                 return this.handlePathPointOnLadder(pEx);
             else if (this.ourEntity.isInWater())
                 return this.handleEntityInWater(oldIndex, pEx);
-            else if (this.level.random.nextInt(10) == 0) {
+            else if (this.level.getRandom().nextInt(10) == 0) {
                 if (!pEx.isOnLadder() && pExNext != null && pExNext.isOnLadder())
                     this.speedModifier = this.getSpeedFactor() / 4.0;
                 else

@@ -7,8 +7,6 @@ import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.util.Mth;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -21,7 +19,6 @@ import org.joml.Vector4f;
  * @author gegy1000
  * @since 1.0.0
  */
-@OnlyIn(Dist.CLIENT)
 public class AdvancedModelBox extends BasicModelPart {
     public final String boxName;
     private final AdvancedEntityModel<?> model;

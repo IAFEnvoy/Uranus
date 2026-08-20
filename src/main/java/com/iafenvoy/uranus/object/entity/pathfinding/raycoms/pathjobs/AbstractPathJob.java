@@ -145,7 +145,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         this.restrictionType = AbstractAdvancedPathNavigate.RestrictionType.NONE;
         this.hardXzRestriction = false;
 
-        this.world = new ChunkCache(world, new BlockPos(minX, world.getMinBuildHeight(), minZ), new BlockPos(maxX, world.getMaxBuildHeight(), maxZ), range, world.dimensionType());
+        this.world = world;
 
         this.start = new BlockPos(start);
         this.end = end;
@@ -225,7 +225,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         this.restrictionType = restrictionType;
         this.hardXzRestriction = hardRestriction;
 
-        this.world = new ChunkCache(world, new BlockPos(this.minX, world.getMinBuildHeight(), this.minZ), new BlockPos(this.maxX, world.getMaxBuildHeight(), this.maxZ), range, world.dimensionType());
+        this.world = world;
 
         this.start = start;
 
@@ -277,7 +277,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             pos.move(Direction.DOWN, 1);
             bs = down;
             down = world.getBlockState(pos.below());
-            if (pos.getY() < world.getMinBuildHeight())
+            if (pos.getY() < world.getMinY())
                 return entity.blockPosition();
         }
 
@@ -355,7 +355,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     public static Direction getXZFacing(BlockPos pos, BlockPos neighbor) {
         BlockPos vector = neighbor.subtract(pos);
-        return Direction.getNearest(vector.getX(), 0, vector.getZ());
+        return Direction.getNearest(vector.getX(), 0, vector.getZ(), Direction.NORTH);
     }
 
     protected boolean onLadderGoingUp(MNode currentNode, BlockPos dPos) {
@@ -670,7 +670,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         //  Can we traverse into this node?  Fix the y up
         int newY = this.getGroundHeight(parent, pos);
 
-        if (newY < this.world.getMinBuildHeight()) return;
+        if (newY < this.world.getMinY()) return;
 
         boolean corner = false;
         if (pos.getY() != newY) {

@@ -50,7 +50,7 @@ public class CustomCollisionsBlockCollisions extends AbstractIterator<VoxelShape
     private BlockGetter getChunk(int p_186412_, int p_186413_) {
         int i = SectionPos.blockToSectionCoord(p_186412_);
         int j = SectionPos.blockToSectionCoord(p_186413_);
-        long k = ChunkPos.asLong(i, j);
+        long k = ChunkPos.pack(i, j);
         if (this.cachedBlockGetter != null && this.cachedBlockGetterPos == k)
             return this.cachedBlockGetter;
         else {

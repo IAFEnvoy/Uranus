@@ -6,16 +6,15 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public class RegistryHelper {
     public static <T> T get(RegistryAccess manager, ResourceKey<Registry<T>> registry, ResourceKey<T> key) {
-        return manager.registryOrThrow(registry).get(key);
+        return manager.lookupOrThrow(registry).get(key).map(holder -> holder.value()).orElseThrow();
     }
 
     public static <T> Holder<T> entry(RegistryAccess manager, ResourceKey<Registry<T>> registry, T obj) {
-        return manager.registryOrThrow(registry).wrapAsHolder(obj);
+        return manager.lookupOrThrow(registry).wrapAsHolder(obj);
     }
 
     public static <T> Holder<T> getEntry(RegistryAccess manager, ResourceKey<Registry<T>> registry, ResourceKey<T> key) {
@@ -24,10 +23,6 @@ public class RegistryHelper {
 
     public static Holder<Enchantment> getEnchantment(RegistryAccess manager, ResourceKey<Enchantment> key) {
         return getEntry(manager, Registries.ENCHANTMENT, key);
-    }
-
-    public static Holder<ArmorMaterial> getArmorMaterial(RegistryAccess manager, ResourceKey<ArmorMaterial> key) {
-        return getEntry(manager, Registries.ARMOR_MATERIAL, key);
     }
 
     public static Holder<DamageType> getDamageSource(RegistryAccess manager, ResourceKey<DamageType> key) {

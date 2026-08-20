@@ -1,55 +1,66 @@
 package com.iafenvoy.uranus.client.render.armor;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import com.iafenvoy.uranus.Uranus;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
-public interface IArmorRendererBase<T extends LivingEntity> {
-    HashMap<ItemLike, IArmorRendererBase<? extends LivingEntity>> RENDERERS = new HashMap<>();
+/**
+ * Client armor-model hook backed by NeoForge's per-item client extensions.
+ *
+ * <p>The old entity argument is intentionally absent: 26.1 extracts an immutable
+ * render state before layer submission. Per-entity animation belongs in the model's
+ * {@link Model#setupAnim(Object)} implementation.</p>
+ */
+public interface IArmorRendererBase {
+    Map<Item, IArmorRendererBase> RENDERERS = new IdentityHashMap<>();
 
-    HumanoidModel<T> getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel<T> defaultModel);
+    Model getHumanoidArmorModel(ItemStack stack, EquipmentClientInfo.LayerType layerType, Model defaultModel);
 
-    default ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot) {
-        if (stack.getItem() instanceof ArmorItem armor) {
-            List<ArmorMaterial.Layer> layers = armor.getMaterial().value().layers();
-            if (!layers.isEmpty()) return layers.getFirst().texture(slot == EquipmentSlot.LEGS);
+    default Identifier getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType layerType, EquipmentClientInfo.Layer layer, Identifier defaultTexture) {
+        return defaultTexture;
+    }
+
+    static void register(IArmorRendererBase renderer, ItemLike... items) {
+        Arrays.stream(items).map(ItemLike::asItem).forEach(item -> RENDERERS.put(item, renderer));
+    }
+
+    @EventBusSubscriber(modid = Uranus.MOD_ID, value = Dist.CLIENT)
+    final class ClientRegistration {
+        private ClientRegistration() {
         }
-        return ResourceLocation.withDefaultNamespace("missingno");
+
+        @SubscribeEvent
+        public static void registerExtensions(RegisterClientExtensionsEvent event) {
+            Map<IArmorRendererBase, java.util.List<Item>> grouped = new IdentityHashMap<>();
+            RENDERERS.forEach((item, renderer) -> grouped.computeIfAbsent(renderer, ignored -> new java.util.ArrayList<>()).add(item));
+            grouped.forEach((renderer, items) -> event.registerItem(renderer.asClientExtension(), items.toArray(Item[]::new)));
+        }
     }
 
-    default void render(PoseStack matrices, MultiBufferSource vertexConsumers, LivingEntity entity, EquipmentSlot slot, int light, ItemStack stack, HumanoidModel<T> defaultModel) {
-        HumanoidModel<T> armorModel = this.getHumanoidArmorModel(entity, stack, slot, defaultModel);
-        defaultModel.copyPropertiesTo(armorModel);
-        armorModel.head.visible = slot == EquipmentSlot.HEAD;
-        armorModel.hat.visible = slot == EquipmentSlot.HEAD;
-        armorModel.body.visible = slot == EquipmentSlot.CHEST;
-        armorModel.leftArm.visible = slot == EquipmentSlot.CHEST;
-        armorModel.rightArm.visible = slot == EquipmentSlot.CHEST;
-        armorModel.leftLeg.visible = slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
-        armorModel.rightLeg.visible = slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
-        VertexConsumer consumer = vertexConsumers.getBuffer(RenderType.armorCutoutNoCull(this.getArmorTexture(stack, entity, slot)));
-        armorModel.renderToBuffer(matrices, consumer, light, OverlayTexture.NO_OVERLAY, -1);
-    }
+    private IClientItemExtensions asClientExtension() {
+        return new IClientItemExtensions() {
+            @Override
+            public Model getHumanoidArmorModel(ItemStack stack, EquipmentClientInfo.LayerType layerType, Model defaultModel) {
+                return IArmorRendererBase.this.getHumanoidArmorModel(stack, layerType, defaultModel);
+            }
 
-    static <T extends LivingEntity> void register(IArmorRendererBase<T> renderer, ItemLike... items) {
-        Arrays.stream(items).forEach(x -> RENDERERS.put(x, renderer));
+            @Override
+            public Identifier getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType layerType, EquipmentClientInfo.Layer layer, Identifier defaultTexture) {
+                return IArmorRendererBase.this.getArmorTexture(stack, layerType, layer, defaultTexture);
+            }
+        };
     }
 }

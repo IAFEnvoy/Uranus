@@ -2,8 +2,8 @@ package com.iafenvoy.uranus.client.render;
 
 import java.util.Optional;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface EntityWithMarkerTextureProvider extends EntityTextureProvider {
-    Optional<ResourceLocation> getMarkerTextureId();
+    Optional<Identifier> getMarkerTextureId();
 }

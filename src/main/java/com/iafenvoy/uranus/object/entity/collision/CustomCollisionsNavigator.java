@@ -103,7 +103,7 @@ public class CustomCollisionsNavigator extends GroundPathNavigation {
                         float f = this.mob.getPathfindingMalus(pathnodetype);
                         if (f < 0.0F || f >= 8.0F) return false;
 
-                        if (pathnodetype == PathType.DAMAGE_FIRE || pathnodetype == PathType.DANGER_FIRE || pathnodetype == PathType.DAMAGE_OTHER)
+                        if (pathnodetype == PathType.FIRE || pathnodetype == PathType.FIRE_IN_NEIGHBOR || pathnodetype == PathType.DAMAGING)
                             return false;
                     }
                 }

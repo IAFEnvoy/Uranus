@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.core.Direction;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -17,7 +15,6 @@ import org.joml.Vector4f;
  * @since 1.9.0
  * Duplicate of ModelPart class which is not final
  */
-@OnlyIn(Dist.CLIENT)
 public class BasicModelPart {
     private final ObjectList<ModelBox> cubeList = new ObjectArrayList<>();
     private final ObjectList<BasicModelPart> childModels = new ObjectArrayList<>();
@@ -163,8 +160,6 @@ public class BasicModelPart {
         this.textureWidth = (float) textureWidthIn;
         this.textureHeight = (float) textureHeightIn;
     }
-
-    @OnlyIn(Dist.CLIENT)
     public static class ModelBox {
         public final float posX1;
         public final float posY1;
@@ -222,8 +217,6 @@ public class BasicModelPart {
             this.quads[5] = new TexturedQuad(new PositionTextureVertex[]{positionTextureVertex3, positionTextureVertex4, positionTextureVertex5, positionTextureVertex6}, f8, f11, f9, f12, texWidth, texHeight, mirorIn, Direction.SOUTH);
         }
     }
-
-    @OnlyIn(Dist.CLIENT)
     record PositionTextureVertex(Vector3f position, float textureU, float textureV) {
         public PositionTextureVertex(float x, float y, float z, float texU, float texV) {
             this(new Vector3f(x, y, z), texU, texV);
@@ -233,8 +226,6 @@ public class BasicModelPart {
             return new PositionTextureVertex(this.position, texU, texV);
         }
     }
-
-    @OnlyIn(Dist.CLIENT)
     static class TexturedQuad {
         public final PositionTextureVertex[] textureVertices;
         public final Vector3f normal;

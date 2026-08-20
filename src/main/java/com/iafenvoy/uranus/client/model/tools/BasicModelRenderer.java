@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import org.joml.Matrix3f;
@@ -16,7 +14,6 @@ import org.joml.Vector4f;
 
 import java.util.Random;
 
-@OnlyIn(Dist.CLIENT)
 public class BasicModelRenderer<T extends Entity> {
     public float textureWidth;
     public float textureHeight;
@@ -192,8 +189,6 @@ public class BasicModelRenderer<T extends Entity> {
     public ModelBox getRandomCube(Random p_228310_1_) {
         return this.cubeList.get(p_228310_1_.nextInt(this.cubeList.size()));
     }
-
-    @OnlyIn(Dist.CLIENT)
     record PositionTextureVertex(Vector3f position, float textureU, float textureV) {
         public PositionTextureVertex(float p_i1158_1_, float p_i1158_2_, float p_i1158_3_, float p_i1158_4_, float p_i1158_5_) {
             this(new Vector3f(p_i1158_1_, p_i1158_2_, p_i1158_3_), p_i1158_4_, p_i1158_5_);
@@ -204,8 +199,6 @@ public class BasicModelRenderer<T extends Entity> {
         }
 
     }
-
-    @OnlyIn(Dist.CLIENT)
     static class TexturedQuad {
         public final PositionTextureVertex[] vertexPositions;
         public final Vector3f normal;
@@ -235,8 +228,6 @@ public class BasicModelRenderer<T extends Entity> {
 
         }
     }
-
-    @OnlyIn(Dist.CLIENT)
     public static class ModelBox {
         private final TexturedQuad[] quads;
         public final float posX1;

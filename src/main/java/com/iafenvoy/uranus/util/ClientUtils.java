@@ -1,13 +1,10 @@
 package com.iafenvoy.uranus.util;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * @author iLexiconn
  * @since 1.0.0
  */
-@OnlyIn(Dist.CLIENT)
 public class ClientUtils {
     private static long lastUpdate = System.currentTimeMillis();
 

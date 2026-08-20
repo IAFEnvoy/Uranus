@@ -1,58 +1,75 @@
 package com.iafenvoy.uranus.client.render;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.platform.TextureUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.texture.ReloadableTexture;
+import net.minecraft.client.renderer.texture.TextureContents;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.server.packs.resources.ResourceManager;
-
-public class ArrayLayeredTexture extends AbstractTexture {
+/** A resource-reloadable texture composed from several source images. */
+public class ArrayLayeredTexture extends ReloadableTexture {
     private static final Logger LOGGER = LogManager.getLogger();
     public final List<String> layeredTextureNames;
 
     public ArrayLayeredTexture(List<String> textureNames) {
-        this.layeredTextureNames = textureNames;
+        super(textureNames.isEmpty() ? Identifier.withDefaultNamespace("missingno") : Identifier.parse(textureNames.getFirst()));
+        this.layeredTextureNames = Collections.unmodifiableList(new ArrayList<>(textureNames));
     }
 
     @Override
-    public void load(ResourceManager manager) {
-        Iterator<String> iterator = this.layeredTextureNames.iterator();
-        String s = iterator.next();
-        Optional<Resource> iresource = manager.getResource(ResourceLocation.parse(s));
-        if (iresource.isPresent())
-            try {
-                NativeImage nativeimage = NativeImage.read(iresource.get().open());
-                while (iterator.hasNext()) {
-                    String s1 = iterator.next();
-                    if (s1 != null) {
-                        Optional<Resource> iresource1 = manager.getResource(ResourceLocation.parse(s1));
-                        assert iresource1.isPresent();
-                        NativeImage nativeimage1 = NativeImage.read(iresource1.get().open());
-                        for (int i = 0; i < Math.min(nativeimage1.getHeight(), nativeimage.getHeight()); i++)
-                            for (int j = 0; j < Math.min(nativeimage1.getWidth(), nativeimage.getWidth()); j++)
-                                nativeimage.blendPixel(j, i, nativeimage1.getPixelRGBA(j, i));
+    public TextureContents loadContents(ResourceManager manager) throws IOException {
+        if (layeredTextureNames.isEmpty()) return TextureContents.createMissing();
+        Iterator<String> iterator = layeredTextureNames.iterator();
+        NativeImage base = NativeImage.read(manager.getResourceOrThrow(Identifier.parse(iterator.next())).open());
+        try {
+            while (iterator.hasNext()) {
+                String name = iterator.next();
+                if (name == null) continue;
+                NativeImage overlay = NativeImage.read(manager.getResourceOrThrow(Identifier.parse(name)).open());
+                try {
+                    int width = Math.min(base.getWidth(), overlay.getWidth());
+                    int height = Math.min(base.getHeight(), overlay.getHeight());
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            base.setPixel(x, y, blend(base.getPixel(x, y), overlay.getPixel(x, y)));
+                        }
                     }
+                } finally {
+                    overlay.close();
                 }
-                if (!RenderSystem.isOnRenderThreadOrInit())
-                    RenderSystem.recordRenderCall(() -> this.loadImage(nativeimage));
-                else this.loadImage(nativeimage);
-            } catch (Exception exception) {
-                LOGGER.error("Couldn't load layered image", exception);
             }
-        else LOGGER.error("Couldn't load layered image");
+            return new TextureContents(base, new net.minecraft.client.resources.metadata.texture.TextureMetadataSection(false, false, net.minecraft.client.renderer.texture.MipmapStrategy.AUTO, 0.1F));
+        } catch (Exception exception) {
+            base.close();
+            LOGGER.error("Couldn't load layered image", exception);
+            throw exception;
+        }
     }
 
-    private void loadImage(NativeImage imageIn) {
-        TextureUtil.prepareImage(this.getId(), imageIn.getWidth(), imageIn.getHeight());
-        imageIn.upload(0, 0, 0, true);
+    private static int blend(int background, int foreground) {
+        int foregroundAlpha = foreground >>> 24;
+        if (foregroundAlpha == 0) return background;
+        if (foregroundAlpha == 255) return foreground;
+
+        int backgroundAlpha = background >>> 24;
+        int resultAlpha = foregroundAlpha + backgroundAlpha * (255 - foregroundAlpha) / 255;
+        if (resultAlpha == 0) return 0;
+
+        int result = resultAlpha << 24;
+        for (int shift = 0; shift <= 16; shift += 8) {
+            int foregroundChannel = foreground >> shift & 255;
+            int backgroundChannel = background >> shift & 255;
+            int channel = (foregroundChannel * foregroundAlpha * 255 + backgroundChannel * backgroundAlpha * (255 - foregroundAlpha)) / (resultAlpha * 255);
+            result |= channel << shift;
+        }
+        return result;
     }
 }

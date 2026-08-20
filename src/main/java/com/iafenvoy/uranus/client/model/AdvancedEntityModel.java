@@ -3,8 +3,6 @@ package com.iafenvoy.uranus.client.model;
 import com.google.common.collect.Maps;
 import com.iafenvoy.uranus.client.model.basic.BasicEntityModel;
 import com.iafenvoy.uranus.client.model.tabula.TextureOffset;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
@@ -16,7 +14,6 @@ import java.util.Map;
  * @author gegy1000
  * @since 1.0.0
  */
-@OnlyIn(Dist.CLIENT)
 public abstract class AdvancedEntityModel<T extends Entity> extends BasicEntityModel<T> {
     private final Map<String, TextureOffset> modelTextureMap = Maps.newHashMap();
     public int texWidth = 32;

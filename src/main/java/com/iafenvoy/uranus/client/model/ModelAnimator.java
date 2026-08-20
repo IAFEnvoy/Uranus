@@ -3,8 +3,6 @@ package com.iafenvoy.uranus.client.model;
 import com.iafenvoy.uranus.animation.Animation;
 import com.iafenvoy.uranus.animation.IAnimatedEntity;
 import com.iafenvoy.uranus.client.model.tabula.Transform;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +13,6 @@ import java.util.HashMap;
  * @author Alexthe666
  * @since 1.0.0
  */
-@OnlyIn(Dist.CLIENT)
 public class ModelAnimator {
     private final HashMap<AdvancedModelBox, Transform> transformMap;
     private final HashMap<AdvancedModelBox, Transform> prevTransformMap;
@@ -181,7 +178,7 @@ public class ModelAnimator {
                     box.rotationPointZ += transform.getOffsetZ();
                 }
             } else {
-                float tick = (animationTick - this.prevTempTick + Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false)) / (this.tempTick - this.prevTempTick);
+                float tick = (animationTick - this.prevTempTick + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false)) / (this.tempTick - this.prevTempTick);
                 float inc = Mth.sin((float) (tick * Math.PI / 2.0F)), dec = 1.0F - inc;
                 for (AdvancedModelBox box : this.prevTransformMap.keySet()) {
                     Transform transform = this.prevTransformMap.get(box);
