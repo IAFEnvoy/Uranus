@@ -35,6 +35,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.NonNull;
 
 public class ChunkCache implements LevelReader {
     protected final int chunkX;
@@ -237,7 +238,7 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public net.minecraft.world.attribute.EnvironmentAttributeReader environmentAttributes() {
+    public net.minecraft.world.attribute.@NonNull EnvironmentAttributeReader environmentAttributes() {
         return this.world.environmentAttributes();
     }
 

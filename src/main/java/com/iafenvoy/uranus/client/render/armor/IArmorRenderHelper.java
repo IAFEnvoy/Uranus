@@ -6,7 +6,6 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
-import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
@@ -14,7 +13,7 @@ import net.minecraft.resources.Identifier;
 /** Utilities for submitting armor geometry through the 26.1 render collector. */
 public interface IArmorRenderHelper {
     static <S> void submitPart(PoseStack poseStack, SubmitNodeCollector collector, int light, Model<S> model, S state, Identifier texture, int color) {
-        collector.submitModel(model, state, poseStack, RenderTypes.armorCutoutNoCull(texture), light, OverlayTexture.NO_OVERLAY, color, (ModelFeatureRenderer.CrumblingOverlay) null);
+        collector.submitModel(model, state, poseStack, RenderTypes.armorCutoutNoCull(texture), light, OverlayTexture.NO_OVERLAY, color, null);
     }
 
     // From trinkets, updated to consume the extracted player render state.

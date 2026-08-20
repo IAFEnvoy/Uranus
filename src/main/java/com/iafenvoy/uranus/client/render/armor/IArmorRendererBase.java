@@ -12,6 +12,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;
 import java.util.IdentityHashMap;
@@ -53,12 +54,12 @@ public interface IArmorRendererBase {
     private IClientItemExtensions asClientExtension() {
         return new IClientItemExtensions() {
             @Override
-            public Model getHumanoidArmorModel(ItemStack stack, EquipmentClientInfo.LayerType layerType, Model defaultModel) {
+            public @NonNull Model getHumanoidArmorModel(@NonNull ItemStack stack, EquipmentClientInfo.@NonNull LayerType layerType, @NonNull Model defaultModel) {
                 return IArmorRendererBase.this.getHumanoidArmorModel(stack, layerType, defaultModel);
             }
 
             @Override
-            public Identifier getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType layerType, EquipmentClientInfo.Layer layer, Identifier defaultTexture) {
+            public Identifier getArmorTexture(@NonNull ItemStack stack, EquipmentClientInfo.@NonNull LayerType layerType, EquipmentClientInfo.@NonNull Layer layer, @NonNull Identifier defaultTexture) {
                 return IArmorRendererBase.this.getArmorTexture(stack, layerType, layer, defaultTexture);
             }
         };

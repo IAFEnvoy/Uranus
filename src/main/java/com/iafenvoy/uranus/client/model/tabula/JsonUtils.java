@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.Reader;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -37,7 +38,7 @@ public class JsonUtils {
     }
 
     public static Item getByNameOrId(String id) {
-        return BuiltInRegistries.ITEM.get(Identifier.tryParse(id)).map(holder -> holder.value()).orElse(null);
+        return BuiltInRegistries.ITEM.get(Identifier.tryParse(id)).map(Holder.Reference::value).orElse(null);
     }
 
     public static Item getItem(JsonElement json, String memberName) {

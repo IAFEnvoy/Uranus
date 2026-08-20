@@ -13,6 +13,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import org.joml.Vector3fc;
+import org.jspecify.annotations.NonNull;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -31,17 +32,17 @@ public interface DynamicItemRenderer {
 
     final class Renderer implements SpecialModelRenderer<ItemStack> {
         @Override
-        public void submit(ItemStack stack, PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay, boolean foil, int color) {
+        public void submit(ItemStack stack, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector collector, int light, int overlay, boolean foil, int color) {
             DynamicItemRenderer renderer = RENDERERS.get(stack.getItem());
             if (renderer != null) renderer.submit(stack, poseStack, collector, light, overlay, foil, color);
         }
 
         @Override
-        public void getExtents(Consumer<Vector3fc> output) {
+        public void getExtents(@NonNull Consumer<Vector3fc> output) {
         }
 
         @Override
-        public ItemStack extractArgument(ItemStack stack) {
+        public ItemStack extractArgument(@NonNull ItemStack stack) {
             return stack;
         }
     }
@@ -50,12 +51,12 @@ public interface DynamicItemRenderer {
         public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(Unbaked::new);
 
         @Override
-        public SpecialModelRenderer<ItemStack> bake(SpecialModelRenderer.BakingContext context) {
+        public SpecialModelRenderer<ItemStack> bake(SpecialModelRenderer.@NonNull BakingContext context) {
             return new Renderer();
         }
 
         @Override
-        public MapCodec<Unbaked> type() {
+        public @NonNull MapCodec<Unbaked> type() {
             return MAP_CODEC;
         }
     }

@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import org.jspecify.annotations.NonNull;
 
 /** Render-state equivalent of the legacy delegating, hideable entity layer. */
 public class HideableLayer<S extends EntityRenderState, M extends EntityModel<? super S>, C extends RenderLayer<S, M>> extends RenderLayer<S, M> {
@@ -18,7 +19,7 @@ public class HideableLayer<S extends EntityRenderState, M extends EntityModel<? 
     }
 
     @Override
-    public void submit(PoseStack poseStack, SubmitNodeCollector collector, int packedLight, S state, float yRot, float partialTick) {
-        if (!hidden) layerRenderer.submit(poseStack, collector, packedLight, state, yRot, partialTick);
+    public void submit(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector collector, int packedLight, S state, float yRot, float partialTick) {
+        if (!this.hidden) this.layerRenderer.submit(poseStack, collector, packedLight, state, yRot, partialTick);
     }
 }

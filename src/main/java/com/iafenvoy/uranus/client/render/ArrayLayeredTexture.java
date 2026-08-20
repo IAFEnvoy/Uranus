@@ -7,10 +7,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,20 +20,19 @@ public class ArrayLayeredTexture extends ReloadableTexture {
 
     public ArrayLayeredTexture(List<String> textureNames) {
         super(textureNames.isEmpty() ? Identifier.withDefaultNamespace("missingno") : Identifier.parse(textureNames.getFirst()));
-        this.layeredTextureNames = Collections.unmodifiableList(new ArrayList<>(textureNames));
+        this.layeredTextureNames = List.copyOf(textureNames);
     }
 
     @Override
-    public TextureContents loadContents(ResourceManager manager) throws IOException {
-        if (layeredTextureNames.isEmpty()) return TextureContents.createMissing();
-        Iterator<String> iterator = layeredTextureNames.iterator();
+    public @NonNull TextureContents loadContents(@NonNull ResourceManager manager) throws IOException {
+        if (this.layeredTextureNames.isEmpty()) return TextureContents.createMissing();
+        Iterator<String> iterator = this.layeredTextureNames.iterator();
         NativeImage base = NativeImage.read(manager.getResourceOrThrow(Identifier.parse(iterator.next())).open());
         try {
             while (iterator.hasNext()) {
                 String name = iterator.next();
                 if (name == null) continue;
-                NativeImage overlay = NativeImage.read(manager.getResourceOrThrow(Identifier.parse(name)).open());
-                try {
+                try (NativeImage overlay = NativeImage.read(manager.getResourceOrThrow(Identifier.parse(name)).open())) {
                     int width = Math.min(base.getWidth(), overlay.getWidth());
                     int height = Math.min(base.getHeight(), overlay.getHeight());
                     for (int y = 0; y < height; y++) {
@@ -42,8 +40,6 @@ public class ArrayLayeredTexture extends ReloadableTexture {
                             base.setPixel(x, y, blend(base.getPixel(x, y), overlay.getPixel(x, y)));
                         }
                     }
-                } finally {
-                    overlay.close();
                 }
             }
             return new TextureContents(base, new net.minecraft.client.resources.metadata.texture.TextureMetadataSection(false, false, net.minecraft.client.renderer.texture.MipmapStrategy.AUTO, 0.1F));

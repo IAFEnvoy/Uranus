@@ -10,6 +10,6 @@ public class SimpleTexture extends DynamicTexture {
     }
 
     public void upload(boolean blur, boolean clamp) {
-        upload();
+        this.upload();
     }
 }

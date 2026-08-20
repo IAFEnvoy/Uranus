@@ -6,7 +6,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 public class ToolMaterialUtil {
     public static ToolMaterial of(int uses, float speed, float attackDamageBonus, int enchantmentLevel, ItemLike... repairIngredients) {

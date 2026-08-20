@@ -10,7 +10,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 public class RegistryHelper {
     public static <T> T get(RegistryAccess manager, ResourceKey<Registry<T>> registry, ResourceKey<T> key) {
-        return manager.lookupOrThrow(registry).get(key).map(holder -> holder.value()).orElseThrow();
+        return manager.lookupOrThrow(registry).get(key).map(Holder.Reference::value).orElseThrow();
     }
 
     public static <T> Holder<T> entry(RegistryAccess manager, ResourceKey<Registry<T>> registry, T obj) {
